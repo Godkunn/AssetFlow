@@ -42,34 +42,15 @@
   <script src="js/screens/notifications.js"></script>
   <script src="js/app.js"></script>
 
-  <!-- Viewport Simulator Component -->
-  <div class="af-sim-controls" id="simControls">
-    <button class="af-sim-btn active" data-sim-width="100%">🖥️ Desktop</button>
-    <button class="af-sim-btn" data-sim-width="768px">📟 Tablet</button>
-    <button class="af-sim-btn" data-sim-width="375px">📱 Mobile</button>
-  </div>
-
-  <!-- Draggable handle on right edge sibling to app container -->
+  <!-- Draggable handle on right edge sibling to app container (After Effects style) -->
   <div class="af-sim-handle" id="simHandleRight"></div>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const btns = document.querySelectorAll('.af-sim-btn');
       const app = document.getElementById('app');
       const handle = document.getElementById('simHandleRight');
       
       let isDragging = false;
-
-      // ── CLICK SWITCHER BUTTONS ───────────────────────────────────
-      btns.forEach(btn => {
-        btn.onclick = () => {
-          btns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          
-          const width = btn.dataset.simWidth;
-          setSimWidth(width);
-        };
-      });
 
       function setSimWidth(width) {
         if (width === '100%') {
@@ -82,16 +63,6 @@
           app.style.setProperty('--af-sim-shadow', 'var(--af-shadow-lg), var(--af-purple-glow) 0 0 40px');
         }
         window.dispatchEvent(new Event('resize'));
-      }
-
-      function updateActiveBtn(widthVal) {
-        btns.forEach(b => {
-          if (b.dataset.simWidth === widthVal) {
-            b.classList.add('active');
-          } else {
-            b.classList.remove('active');
-          }
-        });
       }
 
       // ── MOUSE DRAG RESIZING ──────────────────────────────────────
@@ -117,18 +88,8 @@
         
         if (newWidth > maxWidth - 24) {
           setSimWidth('100%');
-          updateActiveBtn('100%');
         } else {
           setSimWidth(newWidth + 'px');
-          
-          // Match nearest preset button
-          if (Math.abs(newWidth - 768) < 30) {
-            updateActiveBtn('768px');
-          } else if (Math.abs(newWidth - 375) < 30) {
-            updateActiveBtn('375px');
-          } else {
-            btns.forEach(b => b.classList.remove('active'));
-          }
         }
       });
 
@@ -160,16 +121,8 @@
         
         if (newWidth > maxWidth - 24) {
           setSimWidth('100%');
-          updateActiveBtn('100%');
         } else {
           setSimWidth(newWidth + 'px');
-          if (Math.abs(newWidth - 768) < 30) {
-            updateActiveBtn('768px');
-          } else if (Math.abs(newWidth - 375) < 30) {
-            updateActiveBtn('375px');
-          } else {
-            btns.forEach(b => b.classList.remove('active'));
-          }
         }
       });
 
