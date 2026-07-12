@@ -22,28 +22,66 @@ export class AuthService {
       include: { tenant: true },
     });
 
-    // 2. If user doesn't exist, register them under a new default Tenant
+    // 2. If user doesn't exist, register them dynamically
     if (!user) {
-      // Find or create default tenant
-      let tenant = await this.prisma.tenant.findFirst({
-        where: { name: 'Default Organization' },
-      });
+      const emailDomain = oauthUser.email.split('@')[1].toLowerCase();
+      const publicDomains = ['gmail.com', 'yahoo.com', 'outlook.com', 'hotmail.com', 'icloud.com'];
+      const isPublicDomain = publicDomains.includes(emailDomain);
+      
+      let tenant;
+      let assignedRole: Role = Role.EMPLOYEE;
 
-      if (!tenant) {
-        tenant = await this.prisma.tenant.create({
-          data: {
-            name: 'Default Organization',
-            domain: oauthUser.email.split('@')[1],
-          },
+      if (isPublicDomain) {
+        // Shared fallback tenant for public emails
+        tenant = await this.prisma.tenant.findFirst({
+          where: { name: 'Default Organization' },
         });
+
+        if (!tenant) {
+          tenant = await this.prisma.tenant.create({
+            data: {
+              name: 'Default Organization',
+              domain: 'shared',
+            },
+          });
+        }
+
+        // If this shared tenant is completely empty, make the first user the Admin
+        const userCount = await this.prisma.user.count({
+          where: { tenantId: tenant.id },
+        });
+        if (userCount === 0) {
+          assignedRole = Role.TENANT_ADMIN;
+        }
+      } else {
+        // Corporate email: look up tenant by domain
+        tenant = await this.prisma.tenant.findUnique({
+          where: { domain: emailDomain },
+        });
+
+        if (!tenant) {
+          // Domain doesn't exist yet: provision a new Tenant
+          const companyName = emailDomain.split('.')[0].toUpperCase();
+          tenant = await this.prisma.tenant.create({
+            data: {
+              name: `${companyName} Organization`,
+              domain: emailDomain,
+            },
+          });
+          // First user of a new corporate domain is the Tenant Admin
+          assignedRole = Role.TENANT_ADMIN;
+        } else {
+          // Corporate domain exists: join as regular Employee
+          assignedRole = Role.EMPLOYEE;
+        }
       }
 
-      // Create the user as Tenant Admin
+      // Create the user under the resolved Tenant and Role
       user = await this.prisma.user.create({
         data: {
           email: oauthUser.email,
           name: `${oauthUser.firstName} ${oauthUser.lastName}`,
-          role: Role.TENANT_ADMIN,
+          role: assignedRole,
           tenantId: tenant.id,
         },
         include: { tenant: true },
