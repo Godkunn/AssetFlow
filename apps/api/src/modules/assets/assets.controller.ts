@@ -1,9 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Req, Query, UseGuards } from '@nestjs/common';
 import { AssetsService } from './assets.service';
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { TenantGuard } from '../../common/guards/tenant.guard';
 
 @Controller('assets')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, TenantGuard)
 export class AssetsController {
   constructor(private readonly assetsService: AssetsService) {}
 

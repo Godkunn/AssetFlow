@@ -1,9 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Req, UseGuards } from '@nestjs/common';
 import { AllocationService } from './allocation.service';
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { TenantGuard } from '../../common/guards/tenant.guard';
 
 @Controller('allocations')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, TenantGuard)
 export class AllocationController {
   constructor(private readonly allocationService: AllocationService) {}
 

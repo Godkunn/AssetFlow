@@ -40,10 +40,6 @@ import { PrismaModule } from './prisma.module';
     PrismaService,
     {
       provide: APP_GUARD,
-      useClass: TenantGuard,
-    },
-    {
-      provide: APP_GUARD,
       useClass: RbacGuard,
     }
   ],

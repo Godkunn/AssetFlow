@@ -1,9 +1,10 @@
 import { Controller, Get, Post, Body, Patch, Param, Req, UseGuards } from '@nestjs/common';
 import { OrgSetupService } from './org-setup.service';
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
+import { TenantGuard } from '../../common/guards/tenant.guard';
 
 @Controller('org')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, TenantGuard)
 export class OrgSetupController {
   constructor(private readonly orgSetupService: OrgSetupService) {}
 

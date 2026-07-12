@@ -1358,6 +1358,9 @@ pre code {
 .af-side-label {
   flex: 1;
   transition: opacity var(--af-transition-base), width var(--af-transition-base);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* Badge on nav link */
@@ -1741,10 +1744,7 @@ pre code {
     flex: 1;
   }
 
-  /* Make typography tiny on small screen devices */
-  body, p, span, td, th, input, select, textarea, button, a, div, label, code {
-    font-size: 11px !important;
-  }
+
 
   .af-kpi-value {
     font-size: 1.25rem !important;
