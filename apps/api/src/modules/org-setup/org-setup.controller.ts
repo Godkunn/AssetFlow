@@ -30,6 +30,11 @@ export class OrgSetupController {
     return this.orgSetupService.getEmployees(req.user.tenantId);
   }
 
+  @Post('employees')
+  createEmployee(@Req() req: any, @Body() data: any) {
+    return this.orgSetupService.createEmployee(req.user.tenantId, data);
+  }
+
   @Patch('employees/:id')
   updateEmployee(@Req() req: any, @Param('id') id: string, @Body() data: any) {
     return this.orgSetupService.updateEmployee(req.user.tenantId, id, data);

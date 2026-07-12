@@ -23,6 +23,11 @@ export class OrgSetupService {
   async getCategories(tenantId: string) {
     return this.prisma.category.findMany({
       where: { tenantId },
+      include: {
+        _count: {
+          select: { assets: true }
+        }
+      }
     });
   }
 
@@ -37,6 +42,12 @@ export class OrgSetupService {
     return this.prisma.user.findMany({
       where: { tenantId },
       include: { department: true },
+    });
+  }
+
+  async createEmployee(tenantId: string, data: { name: string; email: string; role?: any; departmentId?: string }) {
+    return this.prisma.user.create({
+      data: { ...data, tenantId },
     });
   }
 

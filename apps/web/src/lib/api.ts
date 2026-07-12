@@ -29,6 +29,7 @@ export const orgAPI = {
   getCategories: () => api.get('/org/categories').then(res => res.data),
   createCategory: (data: any) => api.post('/org/categories', data).then(res => res.data),
   getEmployees: () => api.get('/org/employees').then(res => res.data),
+  createEmployee: (data: any) => api.post('/org/employees', data).then(res => res.data),
 };
 
 export const assetsAPI = {
