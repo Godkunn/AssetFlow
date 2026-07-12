@@ -9,6 +9,8 @@ export default function BookingPage() {
   const [showModal, setShowModal] = useState(false);
   const [newBooking, setNewBooking] = useState({ assetId: '', userId: '', startTime: '', endTime: '' });
 
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
   const { data: bookings = [], isLoading } = useQuery({
     queryKey: ['bookings'],
     queryFn: bookingAPI.getBookings,
@@ -30,6 +32,12 @@ export default function BookingPage() {
       queryClient.invalidateQueries({ queryKey: ['bookings'] });
       setShowModal(false);
       setNewBooking({ assetId: '', userId: '', startTime: '', endTime: '' });
+      setToastMessage('Booking scheduled successfully!');
+      setTimeout(() => setToastMessage(null), 3000);
+    },
+    onError: () => {
+      setToastMessage('Failed to create booking. Please try again.');
+      setTimeout(() => setToastMessage(null), 3000);
     }
   });
 
@@ -37,12 +45,22 @@ export default function BookingPage() {
     mutationFn: bookingAPI.cancelBooking,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['bookings'] });
+      setToastMessage('Booking cancelled successfully!');
+      setTimeout(() => setToastMessage(null), 3000);
+    },
+    onError: () => {
+      setToastMessage('Failed to cancel booking.');
+      setTimeout(() => setToastMessage(null), 3000);
     }
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    bookMutation.mutate(newBooking);
+    bookMutation.mutate({
+      ...newBooking,
+      startTime: new Date(newBooking.startTime).toISOString(),
+      endTime: new Date(newBooking.endTime).toISOString()
+    });
   };
 
   return (
@@ -154,6 +172,31 @@ export default function BookingPage() {
               </form>
             </div>
           </div>
+        </div>
+      )}
+
+      {toastMessage && (
+        <div style={{
+          position: "fixed",
+          bottom: "24px",
+          right: "24px",
+          background: "var(--af-primary)",
+          color: "#fff",
+          padding: "12px 24px",
+          borderRadius: "8px",
+          fontSize: "14px",
+          fontWeight: 600,
+          boxShadow: "0 10px 25px rgba(139, 92, 246, 0.4)",
+          zIndex: 9999,
+          animation: "slideIn 0.3s ease",
+        }}>
+          {toastMessage}
+          <style>{`
+            @keyframes slideIn {
+              from { transform: translateY(100%) scale(0.9); opacity: 0; }
+              to { transform: translateY(0) scale(1); opacity: 1; }
+            }
+          `}</style>
         </div>
       )}
     </div>

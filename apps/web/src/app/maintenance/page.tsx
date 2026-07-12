@@ -9,6 +9,8 @@ export default function MaintenancePage() {
   const [showModal, setShowModal] = useState(false);
   const [newTicket, setNewTicket] = useState({ assetId: '', issue: '', priority: 'Medium' });
 
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
   const { data: tickets = [], isLoading } = useQuery({
     queryKey: ['maintenance'],
     queryFn: maintenanceAPI.getTickets,
@@ -27,6 +29,12 @@ export default function MaintenancePage() {
       queryClient.invalidateQueries({ queryKey: ['dashboard-kpis'] });
       setShowModal(false);
       setNewTicket({ assetId: '', issue: '', priority: 'Medium' });
+      setToastMessage('Maintenance ticket created successfully!');
+      setTimeout(() => setToastMessage(null), 3000);
+    },
+    onError: () => {
+      setToastMessage('Failed to create ticket. Please try again.');
+      setTimeout(() => setToastMessage(null), 3000);
     }
   });
 
@@ -36,6 +44,12 @@ export default function MaintenancePage() {
       queryClient.invalidateQueries({ queryKey: ['maintenance'] });
       queryClient.invalidateQueries({ queryKey: ['assets'] });
       queryClient.invalidateQueries({ queryKey: ['dashboard-kpis'] });
+      setToastMessage('Ticket stage updated successfully!');
+      setTimeout(() => setToastMessage(null), 3000);
+    },
+    onError: () => {
+      setToastMessage('Failed to update stage.');
+      setTimeout(() => setToastMessage(null), 3000);
     }
   });
 
@@ -171,6 +185,31 @@ export default function MaintenancePage() {
               </form>
             </div>
           </div>
+        </div>
+      )}
+
+      {toastMessage && (
+        <div style={{
+          position: "fixed",
+          bottom: "24px",
+          right: "24px",
+          background: "var(--af-primary)",
+          color: "#fff",
+          padding: "12px 24px",
+          borderRadius: "8px",
+          fontSize: "14px",
+          fontWeight: 600,
+          boxShadow: "0 10px 25px rgba(139, 92, 246, 0.4)",
+          zIndex: 9999,
+          animation: "slideIn 0.3s ease",
+        }}>
+          {toastMessage}
+          <style>{`
+            @keyframes slideIn {
+              from { transform: translateY(100%) scale(0.9); opacity: 0; }
+              to { transform: translateY(0) scale(1); opacity: 1; }
+            }
+          `}</style>
         </div>
       )}
     </div>
