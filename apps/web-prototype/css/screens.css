@@ -51,15 +51,15 @@
 }
 
 .af-brand-logo-img {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
 }
 
 .af-brand-logo-text {
   font-family: 'Sora', sans-serif;
   font-weight: 700;
-  font-size: 19px;
+  font-size: 32px;
   color: var(--af-text-primary);
   letter-spacing: -0.02em;
 }

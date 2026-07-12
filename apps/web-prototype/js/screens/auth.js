@@ -187,9 +187,9 @@ AF.ScreenAuth = {
               <svg width="16" height="16" viewBox="0 0 23 23" fill="currentColor"><rect x="0" y="0" width="11" height="11" fill="#F25022"/><rect x="12" y="0" width="11" height="11" fill="#7FBA00"/><rect x="0" y="12" width="11" height="11" fill="#00A4EF"/><rect x="12" y="12" width="11" height="11" fill="#FFB900"/></svg>
               <span>Microsoft</span>
             </button>
-            <button type="button" class="af-social-btn" id="btnDiscordAuth" title="Sign in with Discord">
-              <svg width="16" height="16" viewBox="0 0 127.14 96.36" fill="currentColor"><path d="M107.7,8.07A105.15,105.15,0,0,0,77.26,0a77.19,77.19,0,0,0-3.3,6.83A96.67,96.67,0,0,0,52.88,6.83,77.19,77.19,0,0,0,49.58,0,105.15,105.15,0,0,0,19.14,8.07C-3.41,41.74-.53,74.75,14.28,96.36a105.9,105.9,0,0,0,32.22,16.29,80.9,80.9,0,0,0,6.77-11A68.86,68.86,0,0,1,42.82,96.1a54,54,0,0,0,5.34-4.16,74.52,74.52,0,0,0,50.82,0,54,54,0,0,0,5.34,4.16,68.86,68.86,0,0,1-10.45,5.55,80.9,80.9,0,0,0,6.77,11,105.9,105.9,0,0,0,32.22-16.29C128.82,74.75,125.75,41.74,107.7,8.07ZM42.45,65.69C36.18,65.69,31,60,31,53S36.18,40.36,42.45,40.36,53.83,46,53.83,53,48.72,65.69,42.45,65.69Zm42.24,0C78.41,65.69,73.24,60,73.24,53S78.41,40.36,84.69,40.36,96.07,46,96.07,53,91,65.69,84.69,65.69Z"/></svg>
-              <span>Discord</span>
+            <button type="button" class="af-social-btn" id="btnGitHubAuth" title="Sign in with GitHub">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              <span>GitHub</span>
             </button>
           </div>
 
@@ -357,8 +357,8 @@ AF.ScreenAuth = {
     const msBtn = document.getElementById('btnMicrosoftAuth');
     if (msBtn) msBtn.onclick = () => handleOAuth('Microsoft');
 
-    const discordBtn = document.getElementById('btnDiscordAuth');
-    if (discordBtn) discordBtn.onclick = () => handleOAuth('Discord');
+    const githubBtn = document.getElementById('btnGitHubAuth');
+    if (githubBtn) githubBtn.onclick = () => handleOAuth('GitHub');
 
     // Listen for messages back from the OAuth Pop-up Window
     const handleOauthMessage = (e) => {
