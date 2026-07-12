@@ -933,32 +933,40 @@ function LegalModal({ type, onClose }: { type: "terms" | "privacy" | "dmca" | "c
   const { title, date, body } = getModalContent();
 
   return (
-    <div style={{
-      position: "fixed",
-      inset: 0,
-      background: "rgba(6, 3, 12, 0.75)",
-      backdropFilter: "blur(16px)",
-      WebkitBackdropFilter: "blur(16px)",
-      zIndex: 1000,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "24px",
-      animation: "fadeUp 0.3s ease-out"
-    }}>
-      <div style={{
-        background: "rgba(28, 22, 44, 0.95)",
-        border: "1px solid rgba(139, 92, 246, 0.3)",
-        borderRadius: "16px",
-        padding: "32px",
-        maxWidth: "600px",
-        width: "100%",
-        maxHeight: "85vh",
-        overflowY: "auto",
-        boxShadow: "0 24px 80px rgba(0,0,0,0.8), 0 0 40px rgba(139, 92, 246, 0.15)",
-        position: "relative",
-        color: "#F1EEFF"
-      }}>
+    <div 
+      onClick={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(6, 3, 12, 0.75)",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+        zIndex: 1000,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "24px",
+        animation: "fadeUp 0.3s ease-out",
+        cursor: "pointer"
+      }}
+    >
+      <div 
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: "rgba(28, 22, 44, 0.95)",
+          border: "1px solid rgba(139, 92, 246, 0.3)",
+          borderRadius: "16px",
+          padding: "32px",
+          maxWidth: "600px",
+          width: "100%",
+          maxHeight: "85vh",
+          overflowY: "auto",
+          boxShadow: "0 24px 80px rgba(0,0,0,0.8), 0 0 40px rgba(139, 92, 246, 0.15)",
+          position: "relative",
+          color: "#F1EEFF",
+          cursor: "default"
+        }}
+      >
         {/* Close Button */}
         <button
           onClick={onClose}

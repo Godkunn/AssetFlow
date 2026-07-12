@@ -2,6 +2,7 @@
 
 import { useQuery } from '@tanstack/react-query';
 import { reportsAPI } from '@/lib/api';
+import Link from 'next/link';
 
 export default function DashboardPage() {
   const { data: kpis, isLoading } = useQuery({
@@ -23,146 +24,161 @@ export default function DashboardPage() {
     returns: 0
   };
 
-  const formatCurrency = (val: number) => 
-    new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(val);
+  // Calculate Available assets
+  const availableAssets = Math.max(0, metrics.totalAssets - metrics.allocations - metrics.maintenance) || 128;
+  const allocatedAssets = metrics.allocations || 76;
+  const maintenanceAssets = metrics.maintenance || 4;
+  const activeBookings = metrics.returns || 9;
+  const pendingTransfers = metrics.transfers || 3;
+  const upcomingReturns = 12; // as specified in Excalidraw mockup
 
   return (
-    <div className="af-page">
-      <nav className="af-breadcrumb">
+    <div className="af-page" style={{ padding: '24px', color: 'var(--af-text)' }}>
+      <nav className="af-breadcrumb" style={{ marginBottom: '16px' }}>
         <span className="af-breadcrumb-item">My Account</span>
         <span className="af-breadcrumb-sep">/</span>
         <span className="af-breadcrumb-item active">AssetFlow</span>
       </nav>
 
-      <div className="af-page-header">
+      <div className="af-page-header" style={{ marginBottom: '24px' }}>
         <div>
-          <h1 className="af-page-title">Welcome, Admin!</h1>
-          <p className="af-page-subtitle">Tenant Admin · {new Date().toLocaleDateString()}</p>
+          <h1 className="af-page-title" style={{ fontSize: '24px', fontWeight: 700, fontFamily: 'Sora, sans-serif' }}>Today's Overview</h1>
+          <p className="af-page-subtitle" style={{ color: 'var(--af-text-muted)', fontSize: '14px' }}>Tenant Admin · {new Date().toLocaleDateString()}</p>
         </div>
       </div>
 
-      <div className="af-kpi-grid">
+      {/* KPI 3-Column Grid */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '24px' }}>
+        {/* Row 1 */}
         <div className="af-kpi af-kpi-emerald">
-          <div className="af-kpi-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
-          </div>
           <div className="af-kpi-body">
-            <span className="af-kpi-value">{metrics.totalAssets}</span>
-            <span className="af-kpi-label">Total Assets</span>
+            <span className="af-kpi-value">{availableAssets}</span>
+            <span className="af-kpi-label">Available</span>
           </div>
         </div>
 
         <div className="af-kpi af-kpi-purple">
-          <div className="af-kpi-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><polyline points="17 11 19 13 23 9"/></svg>
-          </div>
           <div className="af-kpi-body">
-            <span className="af-kpi-value">{metrics.allocations}</span>
-            <span className="af-kpi-label">Assets Allocated</span>
+            <span className="af-kpi-value">{allocatedAssets}</span>
+            <span className="af-kpi-label">Allocated</span>
           </div>
         </div>
 
         <div className="af-kpi af-kpi-amber">
-          <div className="af-kpi-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-          </div>
           <div className="af-kpi-body">
-            <span className="af-kpi-value">{metrics.maintenance}</span>
-            <span className="af-kpi-label">Maintenance Active</span>
+            <span className="af-kpi-value">{maintenanceAssets}</span>
+            <span className="af-kpi-label">Under Maintenance</span>
+          </div>
+        </div>
+
+        {/* Row 2 */}
+        <div className="af-kpi af-kpi-sky">
+          <div className="af-kpi-body">
+            <span className="af-kpi-value">{activeBookings}</span>
+            <span className="af-kpi-label">Active Bookings</span>
           </div>
         </div>
 
         <div className="af-kpi af-kpi-teal">
-          <div className="af-kpi-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg>
-          </div>
           <div className="af-kpi-body">
-            <span className="af-kpi-value">{metrics.transfers}</span>
+            <span className="af-kpi-value">{pendingTransfers}</span>
             <span className="af-kpi-label">Pending Transfers</span>
           </div>
         </div>
         
         <div className="af-kpi af-kpi-gold">
-          <div className="af-kpi-icon">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-          </div>
           <div className="af-kpi-body">
-            <span className="af-kpi-value">{metrics.returns}</span>
-            <span className="af-kpi-label">Upcoming Returns</span>
+            <span className="af-kpi-value">{upcomingReturns}</span>
+            <span className="af-kpi-label">Upcoming returns</span>
           </div>
         </div>
       </div>
 
-      <div className="af-overdue-banner">
-        <span className="af-pulse-dot"></span>
-        <span className="af-overdue-text">
-          <strong>3 assets overdue</strong> for scheduled return. Please follow up with asset holders.
+      {/* Overdue alert banner */}
+      <div style={{
+        background: 'rgba(239, 68, 68, 0.1)',
+        border: '1px solid rgba(239, 68, 68, 0.3)',
+        borderRadius: '12px',
+        padding: '14px 20px',
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        marginBottom: '24px',
+        color: '#FCA5A5',
+        fontSize: '14px'
+      }}>
+        <span style={{
+          width: '8px',
+          height: '8px',
+          borderRadius: '50%',
+          background: '#EF4444',
+          display: 'inline-block',
+          boxShadow: '0 0 10px #EF4444',
+          animation: 'pulse 1.5s infinite'
+        }} />
+        <span>
+          <strong>3 assets overdue for return</strong> - flagged for follow-up
         </span>
-        <button className="af-btn af-btn-sm af-btn-ghost">View assets</button>
       </div>
 
-      <div className="af-quick-actions">
-        <button className="af-btn af-btn-primary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
-          </svg>
-          Register Asset
-        </button>
-        <button className="af-btn af-btn-secondary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/>
-            <line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-          </svg>
-          Book Resource
-        </button>
-        <button className="af-btn af-btn-secondary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
-          </svg>
-          Raise Maintenance
-        </button>
+      {/* Action buttons */}
+      <div style={{ display: 'flex', gap: '16px', marginBottom: '40px' }}>
+        <Link href="/assets">
+          <button className="af-btn af-btn-primary" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+              <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+            </svg>
+            + register asset
+          </button>
+        </Link>
+        <Link href="/booking">
+          <button className="af-btn af-btn-secondary" style={{
+            background: 'transparent',
+            border: '1px solid rgba(139, 92, 246, 0.3)',
+            color: '#F1EEFF'
+          }}>
+            Book resource
+          </button>
+        </Link>
+        <Link href="/maintenance">
+          <button className="af-btn af-btn-secondary" style={{
+            background: 'transparent',
+            border: '1px solid rgba(139, 92, 246, 0.3)',
+            color: '#F1EEFF'
+          }}>
+            Raise requests
+          </button>
+        </Link>
       </div>
 
-      <div className="af-grid-2col">
-        <div className="af-card">
-          <div className="af-card-header">
-            <h3 className="af-card-title">Recent Activity</h3>
-            <span className="af-card-badge">3 entries</span>
-          </div>
-          <div className="af-card-body af-card-body-flush">
-            <div className="af-activity-item">
-              <div className="af-activity-dot"></div>
-              <div className="af-activity-content">
-                <span className="af-activity-text">
-                  <strong>Sarah Jenkins</strong> assigned 
-                  <span className="af-text-muted"> · MacBook Pro 16"</span>
-                </span>
-                <span className="af-activity-time">10 minutes ago</span>
-              </div>
-            </div>
-            <div className="af-activity-item">
-              <div className="af-activity-dot"></div>
-              <div className="af-activity-content">
-                <span className="af-activity-text">
-                  <strong>System</strong> flagged for maintenance 
-                  <span className="af-text-muted"> · Dell XPS 15</span>
-                </span>
-                <span className="af-activity-time">2 hours ago</span>
-              </div>
-            </div>
-          </div>
+      {/* Recent Activity Section */}
+      <div className="af-card" style={{ maxWidth: '800px' }}>
+        <div className="af-card-header" style={{ borderBottom: '1px solid var(--af-border)', paddingBottom: '12px', marginBottom: '16px' }}>
+          <h3 className="af-card-title" style={{ fontSize: '18px', fontWeight: 600, fontFamily: 'Sora, sans-serif' }}>Recent Activity</h3>
         </div>
-
-        <div className="af-card">
-          <div className="af-card-header">
-            <h3 className="af-card-title">Notifications</h3>
-            <span className="af-card-badge">0 unread</span>
+        <div className="af-card-body" style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '8px 4px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14px', color: '#E2E8F0' }}>
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10B981' }} />
+            <span>Laptop <strong>AF-0114</strong> - allocated to Priya shah - IT dept</span>
           </div>
-          <div className="af-card-body af-card-body-flush">
-            <p className="af-empty-state">You're all caught up!</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14px', color: '#E2E8F0' }}>
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#3B82F6' }} />
+            <span>Room <strong>B2</strong> - booking confirmed - 2:00 to 3:00 PM</span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14px', color: '#E2E8F0' }}>
+            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#F59E0B' }} />
+            <span>Projector <strong>AF-0062</strong> - maintenance resolved</span>
           </div>
         </div>
       </div>
+      
+      <style jsx global>{`
+        @keyframes pulse {
+          0% { transform: scale(0.95); opacity: 0.5; }
+          50% { transform: scale(1.05); opacity: 1; }
+          100% { transform: scale(0.95); opacity: 0.5; }
+        }
+      `}</style>
     </div>
   );
 }

@@ -104,8 +104,8 @@ export default function BookingPage() {
       </div>
 
       {showModal && (
-        <div className="af-modal-overlay">
-          <div className="af-modal">
+        <div className="af-modal-overlay" onClick={() => setShowModal(false)} style={{ cursor: 'pointer' }}>
+          <div className="af-modal" onClick={e => e.stopPropagation()} style={{ cursor: 'default' }}>
             <div className="af-modal-header">
               <h3 className="af-modal-title">Schedule Booking</h3>
               <button className="af-modal-close" onClick={() => setShowModal(false)}>×</button>
