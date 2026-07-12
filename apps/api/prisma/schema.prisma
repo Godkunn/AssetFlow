@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ── Multi-Tenancy ──
+model Tenant {
+  id        String   @id @default(uuid())
+  name      String
+  domain    String?  @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users       User[]
+  assets      Asset[]
+  allocations Allocation[]
+  bookings    Booking[]
+  auditLogs   AuditLog[]
+}
+
+// ── Users & Roles ──
+enum Role {
+  SUPER_ADMIN
+  TENANT_ADMIN
+  EMPLOYEE
+}
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  role      Role     @default(EMPLOYEE)
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  allocations Allocation[]
+  bookings    Booking[]
+  auditLogs   AuditLog[]
+}
+
+// ── Assets ──
+enum AssetStatus {
+  AVAILABLE
+  ALLOCATED
+  MAINTENANCE
+  RETIRED
+}
+
+model Asset {
+  id           String      @id @default(uuid())
+  name         String
+  sku          String      @unique
+  serialNumber String?     @unique
+  status       AssetStatus @default(AVAILABLE)
+  tenantId     String
+  tenant       Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  allocations Allocation[]
+  bookings    Booking[]
+  auditLogs   AuditLog[]
+}
+
+// ── Allocations (Check-out / Check-in) ──
+model Allocation {
+  id          String    @id @default(uuid())
+  assetId     String
+  asset       Asset     @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenantId    String
+  tenant      Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  assignedAt  DateTime  @default(now())
+  returnedAt  DateTime?
+  notes       String?
+}
+
+// ── Bookings (Future Reservations) ──
+model Booking {
+  id          String   @id @default(uuid())
+  assetId     String
+  asset       Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tenantId    String
+  tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  startTime   DateTime
+  endTime     DateTime
+  createdAt   DateTime @default(now())
+
+  // Note: Exclusion constraints for preventing overlap 
+  // must be added via raw SQL migration (tsrange).
+}
+
+// ── Audit Log ──
+model AuditLog {
+  id        String   @id @default(uuid())
+  action    String
+  details   Json?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  assetId   String?
+  asset     Asset?   @relation(fields: [assetId], references: [id], onDelete: SetNull)
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+}
