@@ -1,4 +1,4 @@
-﻿/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
+/* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•
    AssetFlow Design System
    Premium Design Tokens, Typography, Animations & Utilities
    Dark-mode first | Light theme via [data-theme="light"]
@@ -1253,7 +1253,7 @@ pre code {
 .af-sidebar-toggle {
   position: absolute;
   top: 14px;
-  right: -14px;
+  right: -10px;
   width: 28px;
   height: 28px;
   border-radius: var(--af-radius-full);
