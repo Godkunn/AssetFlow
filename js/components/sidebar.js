@@ -23,8 +23,8 @@ AF.Sidebar = {
     ].filter(g => g.items.length > 0);
 
     // Apply dynamic width when not collapsed
-    const widthStyle = collapsed 
-      ? 'width: 68px;' 
+    const widthStyle = collapsed
+      ? 'width: 68px;'
       : (s.sidebarWidth ? `width: ${s.sidebarWidth}px;` : '');
 
     return `
@@ -114,7 +114,6 @@ AF.Sidebar = {
       resizer.addEventListener('mousedown', (e) => {
         isDragging = true;
         resizer.classList.add('dragging');
-        sidebar.classList.add('dragging');
         startX = e.clientX;
         startWidth = sidebar.offsetWidth;
         document.body.style.cursor = 'col-resize';
@@ -135,13 +134,13 @@ AF.Sidebar = {
         } else {
           AF.state.sidebarCollapsed = false;
           sidebar.classList.remove('collapsed');
-          
+
           // Clamp width boundaries
           newWidth = Math.max(180, Math.min(newWidth, 480));
           sidebar.style.width = newWidth + 'px';
           AF.state.sidebarWidth = newWidth;
         }
-        
+
         // Force recalculation for UI layouts
         window.dispatchEvent(new Event('resize'));
       };
@@ -150,13 +149,12 @@ AF.Sidebar = {
         if (isDragging) {
           isDragging = false;
           resizer.classList.remove('dragging');
-          sidebar.classList.remove('dragging');
           document.body.style.cursor = '';
           document.body.style.userSelect = '';
           document.removeEventListener('mousemove', onMouseMove);
           document.removeEventListener('mouseup', onMouseUp);
-          
-          // Re-render UI to update footer layouts and text clipping properly
+
+          // Re-render UI to update footer layouts properly
           AF.render();
         }
       };
@@ -170,7 +168,6 @@ AF.Sidebar = {
       resizer.addEventListener('touchstart', (e) => {
         isDragging = true;
         resizer.classList.add('dragging');
-        sidebar.classList.add('dragging');
         startX = e.touches[0].clientX;
         startWidth = sidebar.offsetWidth;
         e.preventDefault();
@@ -200,7 +197,6 @@ AF.Sidebar = {
         if (isDragging) {
           isDragging = false;
           resizer.classList.remove('dragging');
-          sidebar.classList.remove('dragging');
           document.removeEventListener('touchmove', onTouchMove);
           document.removeEventListener('touchend', onTouchEnd);
           AF.render();
