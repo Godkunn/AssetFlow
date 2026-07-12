@@ -85,6 +85,21 @@ AF.ScreenAuth = {
           </button>
         </div>
         `}
+
+        <div class="af-auth-separator" style="margin: 16px 0;"></div>
+
+        <p class="af-auth-footer-text">
+          By continuing, you agree to our 
+          <a href="#" class="af-auth-footer-link" id="btnTerms">Terms of Service</a> and 
+          <a href="#" class="af-auth-footer-link" id="btnPrivacy">Privacy Policy</a>.
+        </p>
+        <div class="af-auth-footer-links">
+          <a href="#" class="af-auth-footer-link" id="btnDmca">DMCA</a>
+          <span class="af-auth-footer-sep">·</span>
+          <a href="#" class="af-auth-footer-link" id="btnContact">Contact Support</a>
+          <span class="af-auth-footer-sep">·</span>
+          <a href="https://github.com/Godkunn/AssetFlow" target="_blank" class="af-auth-footer-link">Official Website</a>
+        </div>
       </div>
     </div>`;
   },
@@ -108,6 +123,19 @@ AF.ScreenAuth = {
         AF.toast('Password reset link sent to registered email address.', 'info');
       };
     }
+
+    /* ── Legal / footer links modal triggers ────────────────────── */
+    const termsBtn = document.getElementById('btnTerms');
+    if (termsBtn) termsBtn.onclick = (e) => { e.preventDefault(); AF.openModal('terms'); };
+
+    const privacyBtn = document.getElementById('btnPrivacy');
+    if (privacyBtn) privacyBtn.onclick = (e) => { e.preventDefault(); AF.openModal('privacy'); };
+
+    const dmcaBtn = document.getElementById('btnDmca');
+    if (dmcaBtn) dmcaBtn.onclick = (e) => { e.preventDefault(); AF.openModal('dmca'); };
+
+    const contactBtn = document.getElementById('btnContact');
+    if (contactBtn) contactBtn.onclick = (e) => { e.preventDefault(); AF.openModal('contact'); };
 
     /* ── Login form submission ─────────────────────────────────── */
     const loginForm = document.getElementById('loginForm');

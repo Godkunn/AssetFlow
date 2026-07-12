@@ -10,6 +10,78 @@ AF.Modal = {
     let title = '', body = '', footLabel = 'Save';
 
     switch (m.type) {
+      case 'terms':
+        title = 'Terms of Service';
+        body = `
+          <div style="font-size: 13px; line-height: 1.6; max-height: 400px; overflow-y: auto; padding-right: 8px; color: var(--af-text-secondary);">
+            <h4 style="color: var(--af-text-primary); margin-bottom: 8px;">1. Acceptance of Terms</h4>
+            <p style="margin-bottom: 16px;">Welcome to AssetFlow. By accessing or using our SaaS platform, you agree to comply with and be bound by these Terms of Service. If you do not agree, please do not use the service.</p>
+            
+            <h4 style="color: var(--af-text-primary); margin-bottom: 8px;">2. User Accounts</h4>
+            <p style="margin-bottom: 16px;">You must maintain the security of your account and credentials. You are fully responsible for all activities that occur under your account.</p>
+            
+            <h4 style="color: var(--af-text-primary); margin-bottom: 8px;">3. Service Restrictions</h4>
+            <p style="margin-bottom: 16px;">You agree not to modify, reverse engineer, or exploit any portion of the AssetFlow software or network services.</p>
+            
+            <h4 style="color: var(--af-text-primary); margin-bottom: 8px;">4. Limitation of Liability</h4>
+            <p style="margin-bottom: 8px;">AssetFlow is provided "as is" without warranty of any kind. We shall not be liable for any direct or indirect damages arising out of your use of the platform.</p>
+          </div>`;
+        footLabel = 'Close';
+        break;
+
+      case 'privacy':
+        title = 'Privacy Policy';
+        body = `
+          <div style="font-size: 13px; line-height: 1.6; max-height: 400px; overflow-y: auto; padding-right: 8px; color: var(--af-text-secondary);">
+            <h4 style="color: var(--af-text-primary); margin-bottom: 8px;">1. Information We Collect</h4>
+            <p style="margin-bottom: 16px;">We collect basic account details including name, email address, department, and role to facilitate asset logging and resource allocation within your organization.</p>
+            
+            <h4 style="color: var(--af-text-primary); margin-bottom: 8px;">2. How We Use Information</h4>
+            <p style="margin-bottom: 16px;">Your data is used solely to authenticate your session, generate activity feeds, manage maintenance assignments, and track asset handovers.</p>
+            
+            <h4 style="color: var(--af-text-primary); margin-bottom: 8px;">3. Data Security</h4>
+            <p style="margin-bottom: 16px;">We implement standard physical and electronic security measures to safeguard your information from unauthorized access, loss, or misuse.</p>
+            
+            <h4 style="color: var(--af-text-primary); margin-bottom: 8px;">4. Cookies &amp; Tracking</h4>
+            <p style="margin-bottom: 8px;">We use local browser storage and session cookies solely to preserve your login session and theme preferences.</p>
+          </div>`;
+        footLabel = 'Close';
+        break;
+
+      case 'dmca':
+        title = 'DMCA Copyright Policy';
+        body = `
+          <div style="font-size: 13px; line-height: 1.6; max-height: 400px; overflow-y: auto; padding-right: 8px; color: var(--af-text-secondary);">
+            <h4 style="color: var(--af-text-primary); margin-bottom: 8px;">DMCA Compliance Notice</h4>
+            <p style="margin-bottom: 16px;">We respect intellectual property rights. If you believe that any material on our platform infringes your copyright, please submit a formal DMCA notice to copyright@assetflow.io with the following details:</p>
+            <ul style="margin-bottom: 16px; padding-left: 20px;">
+              <li style="margin-bottom: 6px;">Identification of the copyrighted work claimed to be infringed.</li>
+              <li style="margin-bottom: 6px;">Location of the infringing material on our platform.</li>
+              <li style="margin-bottom: 6px;">Your contact details (email, address, phone number).</li>
+              <li style="margin-bottom: 6px;">A statement of good faith belief and accuracy under penalty of perjury.</li>
+            </ul>
+            <p style="margin-bottom: 8px;">Upon receipt of a valid notice, we will remove or disable access to the infringing material in accordance with the Digital Millennium Copyright Act.</p>
+          </div>`;
+        footLabel = 'Close';
+        break;
+
+      case 'contact':
+        title = 'Contact Support';
+        body = `
+          <div class="af-stack">
+            <p style="font-size: 13px; color: var(--af-text-secondary); margin-bottom: 8px;">Need help with your AssetFlow workspace? Fill out this quick form, and our support team will get back to you shortly.</p>
+            <div class="af-field">
+              <label class="af-label">Subject</label>
+              <input class="af-input" id="mSupportSubject" placeholder="e.g. Booking conflict resolution" required />
+            </div>
+            <div class="af-field">
+              <label class="af-label">Message Details</label>
+              <textarea class="af-textarea" id="mSupportMessage" rows="4" placeholder="Describe the issue you're facing..." required></textarea>
+            </div>
+          </div>`;
+        footLabel = 'Submit Ticket';
+        break;
+
       case 'addDept':
         title = 'Create Department';
         body = `
@@ -227,6 +299,21 @@ AF.Modal = {
     if (!m) return;
 
     switch (m.type) {
+      case 'terms':
+      case 'privacy':
+      case 'dmca':
+        AF.closeModal();
+        break;
+
+      case 'contact': {
+        const subject = document.getElementById('mSupportSubject').value.trim();
+        const msg = document.getElementById('mSupportMessage').value.trim();
+        if (!subject || !msg) { AF.toast('Please fill out the form fields.', 'error'); return; }
+        AF.toast('Support ticket submitted successfully!', 'success');
+        AF.closeModal();
+        break;
+      }
+
       case 'addDept': {
         const name = document.getElementById('mDeptName').value.trim();
         if (!name) { AF.toast('Enter a department name.', 'error'); return; }
