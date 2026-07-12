@@ -11,6 +11,7 @@
   background: var(--af-gradient-hero);
   position: relative;
   overflow: hidden;
+  padding: 24px;
 }
 
 .af-auth-canvas {
@@ -18,83 +19,104 @@
   top: 0; left: 0;
   width: 100%; height: 100%;
   z-index: 1;
+  pointer-events: none;
 }
 
 .af-auth-shell {
   display: flex;
-  width: 900px;
-  height: 600px;
+  flex-direction: column;
+  width: 100%;
+  max-width: 440px;
   background: var(--af-surface);
   backdrop-filter: blur(var(--af-glass-blur));
   -webkit-backdrop-filter: blur(var(--af-glass-blur));
   border: 1px solid var(--af-glass-border);
-  border-radius: var(--af-radius-xl);
-  box-shadow: var(--af-shadow-lg);
+  border-radius: var(--af-radius-lg);
+  box-shadow: var(--af-shadow-lg), var(--af-purple-glow) 0 0 30px;
   position: relative;
   z-index: 2;
   overflow: hidden;
-  animation: fadeInScale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  padding: 36px 40px;
+  animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
-.af-auth-banner {
-  flex: 1;
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(0, 0, 0, 0.4)), url('assets/banner-bg.png') center/cover;
-  padding: 40px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  position: relative;
-  border-right: 1px solid var(--af-border);
-}
-
-.af-auth-banner h2 {
+.af-auth-title {
   font-family: 'Sora', sans-serif;
-  font-size: 36px;
-  margin-top: 24px;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--af-text-primary);
+  text-align: center;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+.af-auth-logo-circle {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  border: 2px solid var(--af-purple-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 28px;
+  background: var(--af-bg-deep);
+  overflow: hidden;
+  box-shadow: 0 0 16px var(--af-purple-glow);
+}
+
+.af-auth-logo-circle img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.af-auth-forgot-wrap {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -8px;
   margin-bottom: 16px;
-  color: #fff;
-  line-height: 1.2;
 }
 
-.af-auth-banner p {
+.af-auth-link {
+  font-size: 13px;
+  color: var(--af-text-muted);
+  text-decoration: none;
+  transition: color var(--af-transition-fast);
+}
+
+.af-auth-link:hover {
+  color: var(--af-purple-light);
+}
+
+.af-auth-separator {
+  height: 1px;
+  background: var(--af-border);
+  margin: 24px 0;
+}
+
+.af-auth-subtitle {
+  font-family: 'Sora', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--af-text-primary);
+  margin-bottom: 12px;
+}
+
+.af-auth-info-box {
+  background: rgba(139, 92, 246, 0.05);
+  border: 1px dashed var(--af-border-strong);
+  border-radius: var(--af-radius-md);
+  padding: 12px 14px;
+  font-size: 13px;
   color: var(--af-text-secondary);
-  font-size: 16px;
-  line-height: 1.6;
+  line-height: 1.4;
+  margin-bottom: 16px;
 }
 
-.af-auth-form {
-  flex: 1;
-  padding: 40px 60px;
+.af-auth-fields {
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  background: var(--af-bg-primary);
-}
-
-.af-auth-form h3 {
-  font-size: 24px;
-  margin-bottom: 8px;
-}
-
-.af-demo-chip {
-  display: inline-flex;
-  align-items: center;
-  padding: 6px 12px;
-  border-radius: var(--af-radius-full);
-  background: var(--af-bg-tertiary);
-  border: 1px solid var(--af-border);
-  font-size: 12px;
-  color: var(--af-text-secondary);
-  cursor: pointer;
-  transition: all var(--af-transition-fast);
-  margin-right: 8px;
-  margin-bottom: 8px;
-}
-
-.af-demo-chip:hover {
-  background: var(--af-purple-tint, rgba(139, 92, 246, 0.1));
-  color: var(--af-purple-light);
-  border-color: var(--af-purple-subtle);
+  gap: 16px;
 }
 
 /* ── Dashboard ───────────────────────────────────────────────────── */

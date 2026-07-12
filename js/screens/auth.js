@@ -1,101 +1,90 @@
-/* ═══════════════════════════════════════════════════════════════════
-   AssetFlow — Auth Screen (Login / Sign Up)
-   ═══════════════════════════════════════════════════════════════════ */
+/* AssetFlow — Auth Screen (Login / Sign Up) */
 
 AF.ScreenAuth = {
-
   render() {
     const s = AF.state;
     const isLogin = s.authTab === 'login';
-
-
 
     return `
     <div class="af-auth-wrap">
       <canvas id="particleCanvas" class="af-auth-canvas"></canvas>
 
       <div class="af-auth-shell">
-        <!-- Left: Decorative Banner -->
-        <div class="af-auth-banner">
-          <div class="af-auth-banner-content">
-            <img src="assets/logo.png" alt="AssetFlow" class="af-auth-logo" />
-            <h1 class="af-auth-brand">AssetFlow</h1>
-            <p class="af-auth-tagline">Enterprise Asset &amp; Resource Management</p>
-            <div class="af-auth-features">
-              <span class="af-auth-feature-tag">📊 Real-time Dashboard</span>
-              <span class="af-auth-feature-tag">🔄 Smart Allocation</span>
-              <span class="af-auth-feature-tag">🗓️ Resource Booking</span>
-              <span class="af-auth-feature-tag">🔧 Maintenance Tracking</span>
-              <span class="af-auth-feature-tag">📋 Audit Compliance</span>
-              <span class="af-auth-feature-tag">📈 Analytics &amp; Reports</span>
-            </div>
-            <p class="af-auth-version">v2.0 — SaaS ERP Platform</p>
-          </div>
+        <h1 class="af-auth-title">AssetFlow — ${isLogin ? 'login' : 'signup'}</h1>
+
+        <!-- Logo circle container matching mockup -->
+        <div class="af-auth-logo-circle">
+          <img src="assets/logo.png" alt="AssetFlow" />
         </div>
 
-        <!-- Right: Auth Form -->
-        <div class="af-auth-form">
-          <div class="af-auth-form-inner">
-            <div class="af-tabs af-auth-tabs">
-              <button class="af-tab ${isLogin ? 'active' : ''}" data-auth-tab="login">Login</button>
-              <button class="af-tab ${!isLogin ? 'active' : ''}" data-auth-tab="signup">Sign Up</button>
-            </div>
-
-            ${isLogin ? `
-            <!-- Login Form -->
-            <form id="loginForm" class="af-auth-fields" autocomplete="off">
-              <div class="af-field">
-                <label class="af-label">Email address</label>
-                <input type="email" id="authEmail" class="af-input" placeholder="you@company.com" value="admin@assetflow.io" />
-              </div>
-              <div class="af-field">
-                <label class="af-label">Password</label>
-                <input type="password" id="authPassword" class="af-input" placeholder="Enter your password" value="demo1234" />
-              </div>
-              <button type="submit" class="af-btn af-btn-primary af-btn-block" id="loginBtn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/>
-                </svg>
-                Sign In
-              </button>
-            </form>
-
-
-            ` : `
-            <!-- Signup Form -->
-            <form id="signupForm" class="af-auth-fields" autocomplete="off">
-              <div class="af-field">
-                <label class="af-label">Full name</label>
-                <input type="text" id="signupName" class="af-input" placeholder="Your full name" />
-              </div>
-              <div class="af-field">
-                <label class="af-label">Email address</label>
-                <input type="email" id="signupEmail" class="af-input" placeholder="you@company.com" />
-              </div>
-              <div class="af-field-row">
-                <div class="af-field">
-                  <label class="af-label">Password</label>
-                  <input type="password" id="signupPassword" class="af-input" placeholder="Min 6 characters" />
-                </div>
-                <div class="af-field">
-                  <label class="af-label">Confirm password</label>
-                  <input type="password" id="signupConfirm" class="af-input" placeholder="Re-enter password" />
-                </div>
-              </div>
-              <button type="submit" class="af-btn af-btn-primary af-btn-block" id="signupBtn">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/>
-                </svg>
-                Create Account
-              </button>
-            </form>
-            `}
-
-            <p class="af-auth-footer-text">
-              By continuing you agree to AssetFlow's Terms of Service and Privacy Policy.
-            </p>
+        ${isLogin ? `
+        <!-- Login Form -->
+        <form id="loginForm" class="af-auth-fields" autocomplete="off">
+          <div class="af-field">
+            <label class="af-label">Email</label>
+            <input type="email" id="authEmail" class="af-input" placeholder="name@company.com" value="admin@assetflow.io" required />
           </div>
+          <div class="af-field" style="margin-bottom: 8px;">
+            <label class="af-label">Password</label>
+            <input type="password" id="authPassword" class="af-input" placeholder="**********" value="demo1234" required />
+          </div>
+          
+          <div class="af-auth-forgot-wrap">
+            <a href="#" class="af-auth-link" id="forgotPasswordBtn">Forgot password</a>
+          </div>
+
+          <button type="submit" class="af-btn af-btn-primary af-btn-block" id="loginBtn" style="margin-bottom: 24px;">
+            Sign In
+          </button>
+        </form>
+
+        <div class="af-auth-separator"></div>
+
+        <!-- Signup Navigation block from mockup -->
+        <div class="af-auth-signup-promo">
+          <h3 class="af-auth-subtitle">New here?</h3>
+          <div class="af-auth-info-box">
+            Sign up creates an employee account. admin roles assigned later.
+          </div>
+          <button type="button" class="af-btn af-btn-secondary af-btn-block" data-auth-tab="signup">
+            Create Account
+          </button>
         </div>
+        ` : `
+        <!-- Signup Form -->
+        <form id="signupForm" class="af-auth-fields" autocomplete="off">
+          <div class="af-field">
+            <label class="af-label">Full name</label>
+            <input type="text" id="signupName" class="af-input" placeholder="Your full name" required />
+          </div>
+          <div class="af-field">
+            <label class="af-label">Email</label>
+            <input type="email" id="signupEmail" class="af-input" placeholder="name@company.com" required />
+          </div>
+          <div class="af-field">
+            <label class="af-label">Password</label>
+            <input type="password" id="signupPassword" class="af-input" placeholder="Min 6 characters" required />
+          </div>
+          <div class="af-field" style="margin-bottom: 24px;">
+            <label class="af-label">Confirm password</label>
+            <input type="password" id="signupConfirm" class="af-input" placeholder="Re-enter password" required />
+          </div>
+          
+          <button type="submit" class="af-btn af-btn-primary af-btn-block" id="signupBtn" style="margin-bottom: 24px;">
+            Create Account
+          </button>
+        </form>
+
+        <div class="af-auth-separator"></div>
+
+        <!-- Login Navigation block -->
+        <div class="af-auth-login-promo">
+          <h3 class="af-auth-subtitle">Already have an account?</h3>
+          <button type="button" class="af-btn af-btn-secondary af-btn-block" data-auth-tab="login">
+            Sign In
+          </button>
+        </div>
+        `}
       </div>
     </div>`;
   },
@@ -103,7 +92,7 @@ AF.ScreenAuth = {
   bind() {
     const s = AF.state;
 
-    /* ── Tab switching ─────────────────────────────────────────── */
+    /* ── Click handlers to toggle view tabs ─────────────────────── */
     document.querySelectorAll('[data-auth-tab]').forEach(tab => {
       tab.onclick = () => {
         s.authTab = tab.dataset.authTab;
@@ -111,7 +100,14 @@ AF.ScreenAuth = {
       };
     });
 
-
+    /* ── Forgot password handler ────────────────────────────────── */
+    const forgotBtn = document.getElementById('forgotPasswordBtn');
+    if (forgotBtn) {
+      forgotBtn.onclick = (e) => {
+        e.preventDefault();
+        AF.toast('Password reset link sent to registered email address.', 'info');
+      };
+    }
 
     /* ── Login form submission ─────────────────────────────────── */
     const loginForm = document.getElementById('loginForm');
@@ -206,7 +202,7 @@ AF.ScreenAuth = {
       };
     }
 
-    /* ── Initialize particle canvas ───────────────────────────── */
+    /* ── Initialize particles canvas background ───────────────── */
     setTimeout(() => AF.Particles.init('particleCanvas'), 100);
   }
 };
