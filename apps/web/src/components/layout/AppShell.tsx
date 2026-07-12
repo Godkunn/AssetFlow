@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Topbar from "./Topbar";
 import Sidebar from "./Sidebar";
 
@@ -24,6 +24,9 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
       router.replace("/");
     }
   }, [status, isLoginPage, router]);
+
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   // Show loading spinner while session is being checked
   if (status === "loading") {
@@ -71,9 +74,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
   // Authenticated app shell
   return (
     <div id="app" className="af-app">
-      <Topbar session={session} />
+      <Topbar session={session} onToggleSidebar={() => setSidebarOpen(!sidebarOpen)} />
       <div className="af-app-body">
-        <Sidebar />
+        <Sidebar
+          collapsed={sidebarCollapsed}
+          setCollapsed={setSidebarCollapsed}
+          open={sidebarOpen}
+          setOpen={setSidebarOpen}
+        />
         <main className="af-main" id="mainContent">
           {children}
         </main>
