@@ -967,6 +967,12 @@ pre code {
               border-color var(--af-transition-base);
 }
 
+.af-topbar-left {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--af-space-md);
+}
+
 /* Logo area */
 .af-topbar-logo {
   display: flex;
@@ -1231,7 +1237,7 @@ pre code {
 }
 
 .af-sidebar.collapsed .af-side-label,
-.af-sidebar.collapsed .af-side-section,
+.af-sidebar.collapsed .af-side-section-label,
 .af-sidebar.collapsed .af-side-link-badge {
   opacity: 0;
   width: 0;
@@ -1584,7 +1590,7 @@ pre code {
   }
 
   .af-sidebar .af-side-label,
-  .af-sidebar .af-side-section,
+  .af-sidebar .af-side-section-label,
   .af-sidebar .af-side-link-badge {
     opacity: 0;
     width: 0;

@@ -44,7 +44,7 @@ export default function DashboardPage() {
       </div>
 
       {/* KPI 3-Column Grid */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '20px', marginBottom: '24px' }}>
+      <div className="af-content-grid cols-3" style={{ gap: '20px', marginBottom: '24px' }}>
         {/* Row 1 */}
         <div className="af-kpi af-kpi-emerald">
           <div className="af-kpi-body">
