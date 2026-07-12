@@ -61,18 +61,29 @@ export default function Topbar({ session, onToggleSidebar }: TopbarProps) {
         </button>
         <div className="af-topbar-logo">
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
-            <img
-              src="/assets/logo.png"
-              alt="AssetFlow"
-              style={{
-                width: "28px",
-                height: "28px",
-                borderRadius: "6px",
-                objectFit: "cover",
-                flexShrink: 0,
-                mixBlendMode: "screen",
-              }}
-            />
+            <div style={{
+              width: "28px",
+              height: "28px",
+              borderRadius: "6px",
+              background: "#0c0819", // premium dark tile background
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+              boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+            }}>
+              <img
+                src="/assets/logo.png"
+                alt="AssetFlow"
+                style={{
+                  width: "22px",
+                  height: "22px",
+                  objectFit: "cover",
+                  mixBlendMode: "screen",
+                  opacity: 1, // 100% opacity in both light and dark theme!
+                }}
+              />
+            </div>
             <span style={{ fontWeight: 700, fontSize: "18px", color: "var(--af-text)", letterSpacing: "-0.5px" }}>
               AssetFlow
             </span>
