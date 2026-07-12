@@ -732,9 +732,10 @@ export default function LoginPage() {
         
         .login-container {
           display: flex;
-          height: 100vh;
+          min-height: 100vh;
           width: 100vw;
-          overflow: hidden;
+          overflow-x: hidden;
+          overflow-y: auto;
           background: #080410;
           position: relative;
         }
@@ -748,7 +749,7 @@ export default function LoginPage() {
           z-index: 5;
           border-right: none;
           justify-content: space-between;
-          overflow-y: auto;
+          min-height: 100vh;
         }
 
         .bottom-stats-row {
@@ -763,9 +764,10 @@ export default function LoginPage() {
           display: flex;
           flex-direction: column;
           padding: 40px 48px;
-          overflow-y: auto;
           position: relative;
           z-index: 5;
+          justify-content: center;
+          min-height: 100vh;
         }
 
         .right-panel-content {
