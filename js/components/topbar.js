@@ -15,7 +15,7 @@ AF.Topbar = {
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
         <div class="af-topbar-logo">
-          <img src="assets/logo.png" alt="AssetFlow" />
+          <img src="assets/icons/logo.png" alt="AssetFlow" />
           <span class="af-topbar-logo-text">AssetFlow</span>
           <span class="af-topbar-logo-tag">ERP</span>
         </div>
