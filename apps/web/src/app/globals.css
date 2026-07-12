@@ -1247,8 +1247,11 @@ pre code {
 
 .af-sidebar.collapsed .af-side-link {
   justify-content: center;
-  padding-left: 0;
-  padding-right: 0;
+  padding: 0 !important;
+  width: 42px !important;
+  height: 42px !important;
+  border-radius: var(--af-radius-full) !important;
+  margin: 4px auto !important;
 }
 
 .af-sidebar.collapsed .af-side-link .af-side-icon {
@@ -1678,8 +1681,11 @@ pre code {
 
   .af-sidebar:not(.open) .af-side-link {
     justify-content: center !important;
-    padding-left: 0 !important;
-    padding-right: 0 !important;
+    padding: 0 !important;
+    width: 42px !important;
+    height: 42px !important;
+    border-radius: var(--af-radius-full) !important;
+    margin: 4px auto !important;
   }
 
   .af-sidebar-toggle,
