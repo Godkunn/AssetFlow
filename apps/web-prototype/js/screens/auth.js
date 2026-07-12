@@ -187,9 +187,9 @@ AF.ScreenAuth = {
               <svg width="16" height="16" viewBox="0 0 23 23" fill="currentColor"><rect x="0" y="0" width="11" height="11" fill="#F25022"/><rect x="12" y="0" width="11" height="11" fill="#7FBA00"/><rect x="0" y="12" width="11" height="11" fill="#00A4EF"/><rect x="12" y="12" width="11" height="11" fill="#FFB900"/></svg>
               <span>Microsoft</span>
             </button>
-            <button type="button" class="af-social-btn" id="btnGitHubAuth" title="Sign in with GitHub">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
-              <span>GitHub</span>
+            <button type="button" class="af-social-btn" id="btnDiscordAuth" title="Sign in with Discord">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="#5865F2"><path d="M20.317 4.37a19.791 19.791 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.736 19.736 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057c.002.022.015.043.03.056a19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028 14.09 14.09 0 0 0 1.226-1.994.076.076 0 0 0-.041-.106 13.107 13.107 0 0 1-1.872-.892.077.077 0 0 1-.008-.128 10.2 10.2 0 0 0 .372-.292.074.074 0 0 1 .077-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .078.01c.12.098.246.198.373.292a.077.077 0 0 1-.006.127 12.299 12.299 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.839 19.839 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03z"/></svg>
+              <span>Discord</span>
             </button>
           </div>
 
@@ -263,90 +263,70 @@ AF.ScreenAuth = {
       };
     }
 
-    /* ── OAUTH CLIENT SIGN IN CONTROLLER (SIMULATED OAUTH WINDOWS) ── */
+    /* ── OAUTH CLIENT SIGN IN CONTROLLER ────────────────────────── */
+    const API_BASE = 'http://localhost:4000';
+
+    // Map providers to real backend endpoints (NestJS routes)
+    const OAUTH_URLS = {
+      Google: `${API_BASE}/auth/google`,
+      Discord: `${API_BASE}/auth/discord`,
+      Microsoft: null, // Microsoft SSO simulated until backend added
+    };
+
     const handleOAuth = (provider) => {
-      // Read client configuration from local config window object
-      const config = window.AF_CONFIG || {};
-      const clientId = provider === 'Google' ? config.googleClientId 
-                     : provider === 'Microsoft' ? config.microsoftClientId 
-                     : config.githubClientId;
+      AF.toast(`Connecting to ${provider}...`, 'info');
 
-      AF.toast(`Connecting to ${provider} OAuth...`, 'info');
+      const w = 500, h = 640;
+      const left = Math.round((window.screen.width / 2) - (w / 2));
+      const top  = Math.round((window.screen.height / 2) - (h / 2));
+      const popupUrl = OAUTH_URLS[provider];
 
-      // Create a centered pop-up window to redirect to NestJS OAuth or simulate it
-      const w = 500, h = 600;
-      const left = (window.screen.width / 2) - (w / 2);
-      const top = (window.screen.height / 2) - (h / 2);
-      
-      const popupUrl = provider === 'Google' ? 'http://localhost:4000/auth/google' : '';
-      const oauthWindow = window.open(popupUrl, `${provider} OAuth`, `width=${w},height=${h},top=${top},left=${left}`);
-      
-      // Inject simulated OAuth consent page into pop-up if no real url is loaded
+      const oauthWindow = window.open(
+        popupUrl || 'about:blank',
+        `${provider} OAuth`,
+        `width=${w},height=${h},top=${top},left=${left},scrollbars=yes`
+      );
+
+      // Inject simulated consent page only when no real URL is available
       if (oauthWindow && !popupUrl) {
+        const config = window.AF_CONFIG || {};
+        const clientId = config[provider.toLowerCase() + 'ClientId'] || 'configured-in-env';
         oauthWindow.document.write(`
+          <!DOCTYPE html>
           <html>
-          <head>
-            <title>${provider} Authorization</title>
-            <style>
-              body {
-                background: #0f0c1b;
-                color: #f1eeff;
-                font-family: 'Inter', sans-serif;
-                display: flex;
-                flex-direction: column;
-                align-items: center;
-                justify-content: center;
-                height: 100vh;
-                margin: 0;
-                padding: 24px;
-                text-align: center;
-              }
-              .card {
-                background: rgba(255,255,255,0.03);
-                border: 1px solid rgba(139,92,246,0.15);
-                padding: 32px;
-                border-radius: 16px;
-                box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-                max-width: 380px;
-              }
-              .logo { margin-bottom: 20px; }
-              .btn {
-                background: linear-gradient(135deg, #8B5CF6 0%, #38BDF8 100%);
-                color: #fff;
-                border: none;
-                padding: 12px 24px;
-                font-size: 14px;
-                font-weight: 600;
-                border-radius: 8px;
-                cursor: pointer;
-                width: 100%;
-                margin-top: 24px;
-                box-shadow: 0 0 12px rgba(139,92,246,0.3);
-              }
-              .btn:hover { opacity: 0.9; }
-              .text-muted { color: #8b83a3; font-size: 12px; margin-top: 16px; line-height: 1.4; }
-            </style>
-          </head>
+          <head><title>${provider} Authorization</title>
+          <style>
+            *{margin:0;padding:0;box-sizing:border-box}
+            body{background:#0f0c1b;color:#f1eeff;font-family:Inter,sans-serif;
+              display:flex;align-items:center;justify-content:center;min-height:100vh;padding:24px;}
+            .card{background:rgba(255,255,255,0.03);border:1px solid rgba(139,92,246,0.2);
+              padding:40px 32px;border-radius:20px;box-shadow:0 20px 60px rgba(0,0,0,0.6);max-width:380px;width:100%;text-align:center;}
+            .icon{width:56px;height:56px;margin:0 auto 20px;border-radius:12px;
+              background:linear-gradient(135deg,#8B5CF6,#38BDF8);display:flex;align-items:center;justify-content:center;}
+            h3{font-size:18px;font-weight:700;margin-bottom:10px;}
+            p{font-size:13px;color:#a89ec8;line-height:1.6;margin-bottom:24px;}
+            .btn{background:linear-gradient(135deg,#8B5CF6 0%,#38BDF8 100%);color:#fff;
+              border:none;padding:14px 24px;font-size:14px;font-weight:600;border-radius:10px;
+              cursor:pointer;width:100%;box-shadow:0 0 20px rgba(139,92,246,0.4);}
+            .btn:hover{opacity:0.9;transform:translateY(-1px);}
+            .hint{color:#6b5f85;font-size:11px;margin-top:16px;}
+            code{font-family:monospace;font-size:10px;background:rgba(0,0,0,0.3);padding:2px 6px;border-radius:4px;}
+          </style></head>
           <body>
             <div class="card">
-              <div class="logo">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#A78BFA" stroke-width="1.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-              </div>
+              <div class="icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg></div>
               <h3>Authorize AssetFlow</h3>
-              <p style="font-size: 13px; color: #a89ec8; line-height: 1.5;">AssetFlow ERP is requesting permission to access your profile name and email address via <strong>${provider}</strong>.</p>
+              <p>AssetFlow ERP is requesting permission to access your profile name and email via <strong>${provider}</strong>.</p>
               <button class="btn" id="btnAuthorize">Agree and Continue</button>
-              <div class="text-muted">
-                ClientID: <code style="font-family: monospace; font-size: 11px; background: rgba(0,0,0,0.3); padding: 2px 4px; border-radius: 4px;">${clientId || 'configured-in-env'}</code>
-              </div>
+              <div class="hint">ClientID: <code>${clientId}</code></div>
             </div>
             <script>
               document.getElementById('btnAuthorize').onclick = () => {
-                window.opener.postMessage({ type: 'oauth-success', provider: '${provider}' }, '*');
+                window.opener && window.opener.postMessage({ type:'oauth-success', provider:'${provider}' }, location.origin === 'null' ? '*' : location.origin);
                 window.close();
               };
             <\/script>
-          </body>
-          </html>
+          </body></html>
         `);
         oauthWindow.document.close();
       }
@@ -358,8 +338,8 @@ AF.ScreenAuth = {
     const msBtn = document.getElementById('btnMicrosoftAuth');
     if (msBtn) msBtn.onclick = () => handleOAuth('Microsoft');
 
-    const githubBtn = document.getElementById('btnGitHubAuth');
-    if (githubBtn) githubBtn.onclick = () => handleOAuth('GitHub');
+    const discordBtn = document.getElementById('btnDiscordAuth');
+    if (discordBtn) discordBtn.onclick = () => handleOAuth('Discord');
 
     // Listen for messages back from the OAuth Pop-up Window
     const handleOauthMessage = (e) => {

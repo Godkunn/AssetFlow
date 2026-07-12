@@ -5,6 +5,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { DiscordStrategy } from './discord.strategy';
+import { GoogleStrategy } from './google.strategy';
 import { JwtStrategy } from './jwt.strategy';
 import { PrismaService } from '../prisma.service';
 
@@ -21,7 +22,7 @@ import { PrismaService } from '../prisma.service';
     }),
     ConfigModule,
   ],
-  providers: [AuthService, DiscordStrategy, JwtStrategy, PrismaService],
+  providers: [AuthService, DiscordStrategy, GoogleStrategy, JwtStrategy, PrismaService],
   controllers: [AuthController],
   exports: [AuthService, PassportModule],
 })

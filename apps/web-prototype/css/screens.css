@@ -12,11 +12,12 @@
   overflow: hidden;
 }
 
+/* Canvas covers the ENTIRE auth page behind both sides */
 .af-auth-canvas {
-  position: absolute;
+  position: fixed;
   top: 0; left: 0;
-  width: 100%; height: 100%;
-  z-index: 1;
+  width: 100vw; height: 100vh;
+  z-index: 0;
   pointer-events: none;
 }
 
@@ -29,14 +30,17 @@
   padding: 48px 64px;
   position: relative;
   overflow: hidden;
-  background: radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.15) 0%, transparent 40%),
-              linear-gradient(135deg, #0A0612 0%, #171127 100%);
+  z-index: 2;
+  /* Semi-transparent so torus knot shows through */
+  background: radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.12) 0%, transparent 40%),
+              linear-gradient(135deg, rgba(10, 6, 18, 0.82) 0%, rgba(23, 17, 39, 0.88) 100%);
+  backdrop-filter: blur(2px);
   border-right: 1px solid var(--af-border);
 }
 
 [data-theme="light"] .af-auth-banner-side {
-  background: radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 40%),
-              linear-gradient(135deg, #F5F3FF 0%, #EDE9FE 100%);
+  background: radial-gradient(circle at 10% 20%, rgba(139, 92, 246, 0.06) 0%, transparent 40%),
+              linear-gradient(135deg, rgba(245, 243, 255, 0.88) 0%, rgba(237, 233, 254, 0.92) 100%);
 }
 
 .af-banner-header {
@@ -295,7 +299,10 @@
   justify-content: center;
   padding: 40px;
   position: relative;
-  background: var(--af-bg-primary);
+  z-index: 2;
+  /* Semi-transparent so torus knot background shines through */
+  background: rgba(17, 13, 27, 0.6);
+  backdrop-filter: blur(4px);
 }
 
 .af-auth-card {

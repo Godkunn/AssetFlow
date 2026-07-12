@@ -57,12 +57,12 @@ AF.ScreenDashboard = {
         </svg>`
       },
       {
-        label: 'Total Asset Value',
-        value: kpis.totalValue,
+        label: 'Upcoming Returns',
+        value: kpis.returns,
         color: 'gold',
-        formatted: AF.formatCurrency(kpis.totalValue),
         icon: `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+          <path d="M3 3v5h5"/>
         </svg>`
       }
     ];

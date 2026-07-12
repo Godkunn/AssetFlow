@@ -1,0 +1,141 @@
+"use client";
+
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
+import { Session } from "next-auth";
+
+interface TopbarProps {
+  session?: Session | null;
+}
+
+export default function Topbar({ session }: TopbarProps) {
+  const router = useRouter();
+
+  const userName = session?.user?.name || "Admin";
+  const userEmail = session?.user?.email || "";
+  const userImage = session?.user?.image || null;
+  const initials = userName
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
+  return (
+    <header className="af-topbar">
+      <div className="af-topbar-left">
+        <button className="af-topbar-hamburger" title="Toggle sidebar">
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+          >
+            <line x1="3" y1="6" x2="21" y2="6" />
+            <line x1="3" y1="12" x2="21" y2="12" />
+            <line x1="3" y1="18" x2="21" y2="18" />
+          </svg>
+        </button>
+        <div className="af-topbar-logo">
+          <Link href="/" style={{ display: "flex", alignItems: "center", gap: "8px", textDecoration: "none" }}>
+            <span style={{ fontWeight: 700, fontSize: "18px", color: "var(--af-text)", letterSpacing: "-0.5px" }}>
+              AssetFlow
+            </span>
+            <span style={{
+              fontSize: "10px",
+              fontWeight: 600,
+              background: "var(--af-primary)",
+              color: "#fff",
+              padding: "2px 6px",
+              borderRadius: "4px",
+              letterSpacing: "0.5px"
+            }}>
+              ERP
+            </span>
+          </Link>
+        </div>
+      </div>
+
+      <div className="af-topbar-center">
+        <div className="af-topbar-search">
+          <svg
+            className="search-icon"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input
+            type="text"
+            placeholder="Search assets, bookings, people..."
+            autoComplete="off"
+          />
+          <kbd className="search-kbd">Ctrl K</kbd>
+        </div>
+      </div>
+
+      <div className="af-topbar-right">
+        <Link href="/notifications" className="af-topbar-bell" title="Notifications">
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          </svg>
+        </Link>
+
+        <div className="af-topbar-user">
+          {userImage ? (
+            <img
+              src={userImage}
+              alt={userName}
+              className="af-topbar-user-avatar"
+              style={{ objectFit: "cover" }}
+            />
+          ) : (
+            <div className="af-topbar-user-avatar">{initials}</div>
+          )}
+          <div className="af-topbar-user-info">
+            <span className="af-topbar-user-name">{userName}</span>
+            <span className="af-topbar-user-role">
+              {userEmail || "Tenant Admin"}
+            </span>
+          </div>
+          <button
+            className="af-topbar-bell"
+            onClick={() => signOut({ callbackUrl: "/login" })}
+            title="Sign out"
+            style={{ width: "32px", height: "32px", borderRadius: "var(--af-radius-sm)", marginLeft: "8px" }}
+          >
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+              <polyline points="16 17 21 12 16 7" />
+              <line x1="21" y1="12" x2="9" y2="12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+}
