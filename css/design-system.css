@@ -174,12 +174,9 @@ body {
   font-size: 0.9375rem;
   line-height: 1.6;
   color: var(--af-text-primary);
-  background: #06040b;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
+  background: var(--af-bg-deep);
+  min-height: 100%;
+  overflow-x: hidden;
 }
 
 img, svg, video, canvas {

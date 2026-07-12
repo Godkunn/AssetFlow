@@ -12,16 +12,8 @@
   flex-direction: column;
   height: 100vh;
   width: 100%;
-  max-width: var(--af-sim-width, 100%);
-  margin: 0 auto;
   overflow: hidden;
   background: var(--af-bg-deep);
-  box-shadow: var(--af-sim-shadow, none);
-  border-left: var(--af-sim-border, none);
-  border-right: var(--af-sim-border, none);
-  transition: max-width 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-              box-shadow 0.4s ease,
-              border 0.4s ease;
 }
 
 .af-app-body {
@@ -848,32 +840,21 @@
 
 
 
-/* ── Resizable Viewport Handle (After Effects style) ───────────── */
-.af-sim-handle {
-  position: fixed;
-  top: 0;
-  left: calc(50% + (var(--af-sim-width, 100%) / 2) - 6px);
-  width: 12px;
-  height: 100vh;
-  cursor: ew-resize;
-  z-index: 999999;
-  background: transparent;
-  pointer-events: auto;
-}
-
-.af-sim-handle::after {
-  content: '';
+/* ── Sidebar Resizer Handle (After Effects style) ───────────────── */
+.af-sidebar-resizer {
   position: absolute;
   top: 0;
-  left: 5px;
-  width: 2px;
+  right: -3px; /* centers the resizer mouse pointer boundary */
+  width: 6px;
   height: 100%;
+  cursor: col-resize;
+  z-index: 100;
   background: transparent;
   transition: background var(--af-transition-fast), box-shadow var(--af-transition-fast);
 }
 
-.af-sim-handle:hover::after,
-.af-sim-handle.dragging::after {
+.af-sidebar-resizer:hover,
+.af-sidebar-resizer.dragging {
   background: var(--af-purple-light);
   box-shadow: 0 0 10px var(--af-purple-glow);
 }

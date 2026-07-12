@@ -22,8 +22,13 @@ AF.Sidebar = {
       }
     ].filter(g => g.items.length > 0);
 
+    // Apply dynamic width when not collapsed
+    const widthStyle = collapsed 
+      ? 'width: 68px;' 
+      : (s.sidebarWidth ? `width: ${s.sidebarWidth}px;` : '');
+
     return `
-    <nav class="af-sidebar ${collapsed ? 'collapsed' : ''} ${s.sidebarOpen ? 'open' : ''}" id="sidebar">
+    <nav class="af-sidebar ${collapsed ? 'collapsed' : ''} ${s.sidebarOpen ? 'open' : ''}" id="sidebar" style="${widthStyle}">
       <!-- Chevron Toggle Button for Desktop -->
       <button class="af-sidebar-toggle" id="sidebarToggleBtn" title="Toggle Sidebar">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -71,6 +76,9 @@ AF.Sidebar = {
           </div>
         </div>
       </div>` : ''}
+
+      <!-- Sidebar Resizer Handle (After Effects style) -->
+      <div class="af-sidebar-resizer" id="sidebarResizer"></div>
     </nav>`;
   },
 
@@ -93,6 +101,112 @@ AF.Sidebar = {
         AF.state.sidebarCollapsed = !AF.state.sidebarCollapsed;
         AF.render();
       };
+    }
+
+    // Draggable Sidebar Border Resizer Handle
+    const resizer = document.getElementById('sidebarResizer');
+    const sidebar = document.getElementById('sidebar');
+    if (resizer && sidebar) {
+      let isDragging = false;
+      let startX = 0;
+      let startWidth = 0;
+
+      resizer.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        resizer.classList.add('dragging');
+        startX = e.clientX;
+        startWidth = sidebar.offsetWidth;
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+        e.preventDefault();
+      });
+
+      const onMouseMove = (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - startX;
+        let newWidth = startWidth + deltaX;
+
+        if (newWidth < 120) {
+          // Snap collapsed
+          AF.state.sidebarCollapsed = true;
+          sidebar.classList.add('collapsed');
+          sidebar.style.width = '68px';
+        } else {
+          AF.state.sidebarCollapsed = false;
+          sidebar.classList.remove('collapsed');
+          
+          // Clamp width boundaries
+          newWidth = Math.max(180, Math.min(newWidth, 480));
+          sidebar.style.width = newWidth + 'px';
+          AF.state.sidebarWidth = newWidth;
+        }
+        
+        // Force recalculation for UI layouts
+        window.dispatchEvent(new Event('resize'));
+      };
+
+      const onMouseUp = () => {
+        if (isDragging) {
+          isDragging = false;
+          resizer.classList.remove('dragging');
+          document.body.style.cursor = '';
+          document.body.style.userSelect = '';
+          document.removeEventListener('mousemove', onMouseMove);
+          document.removeEventListener('mouseup', onMouseUp);
+          
+          // Re-render UI to update footer layouts and text clipping properly
+          AF.render();
+        }
+      };
+
+      resizer.addEventListener('mousedown', () => {
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+      });
+
+      // Touch screen support
+      resizer.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        resizer.classList.add('dragging');
+        startX = e.touches[0].clientX;
+        startWidth = sidebar.offsetWidth;
+        e.preventDefault();
+      });
+
+      const onTouchMove = (e) => {
+        if (!isDragging) return;
+        const clientX = e.touches[0].clientX;
+        const deltaX = clientX - startX;
+        let newWidth = startWidth + deltaX;
+
+        if (newWidth < 120) {
+          AF.state.sidebarCollapsed = true;
+          sidebar.classList.add('collapsed');
+          sidebar.style.width = '68px';
+        } else {
+          AF.state.sidebarCollapsed = false;
+          sidebar.classList.remove('collapsed');
+          newWidth = Math.max(180, Math.min(newWidth, 480));
+          sidebar.style.width = newWidth + 'px';
+          AF.state.sidebarWidth = newWidth;
+        }
+        window.dispatchEvent(new Event('resize'));
+      };
+
+      const onTouchEnd = () => {
+        if (isDragging) {
+          isDragging = false;
+          resizer.classList.remove('dragging');
+          document.removeEventListener('touchmove', onTouchMove);
+          document.removeEventListener('touchend', onTouchEnd);
+          AF.render();
+        }
+      };
+
+      resizer.addEventListener('touchstart', () => {
+        document.addEventListener('touchmove', onTouchMove);
+        document.addEventListener('touchend', onTouchEnd);
+      });
     }
   }
 };
