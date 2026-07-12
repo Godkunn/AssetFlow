@@ -8,12 +8,7 @@ AF.ScreenAuth = {
     const s = AF.state;
     const isLogin = s.authTab === 'login';
 
-    const demoRoles = [
-      { role: 'Admin',           icon: '🛡️', desc: 'Full system access' },
-      { role: 'Asset Manager',   icon: '📦', desc: 'Manage inventory & allocation' },
-      { role: 'Department Head', icon: '👥', desc: 'Approve dept requests' },
-      { role: 'Employee',        icon: '💼', desc: 'View assets & bookings' }
-    ];
+
 
     return `
     <div class="af-auth-wrap">
@@ -65,21 +60,7 @@ AF.ScreenAuth = {
               </button>
             </form>
 
-            <div class="af-auth-divider">
-              <span>or try a demo role</span>
-            </div>
 
-            <div class="af-auth-demo-roles">
-              ${demoRoles.map(d => `
-                <button class="af-demo-chip" data-demo-role="${d.role}">
-                  <span class="af-demo-chip-icon">${d.icon}</span>
-                  <span class="af-demo-chip-info">
-                    <span class="af-demo-chip-role">${d.role}</span>
-                    <span class="af-demo-chip-desc">${d.desc}</span>
-                  </span>
-                </button>
-              `).join('')}
-            </div>
             ` : `
             <!-- Signup Form -->
             <form id="signupForm" class="af-auth-fields" autocomplete="off">
@@ -130,22 +111,7 @@ AF.ScreenAuth = {
       };
     });
 
-    /* ── Demo role chip click ──────────────────────────────────── */
-    document.querySelectorAll('[data-demo-role]').forEach(chip => {
-      chip.onclick = () => {
-        const role = chip.dataset.demoRole;
-        const emp = s.employees.find(e => e.role === role) || s.employees[0];
-        s.session = {
-          name: emp.name,
-          email: emp.email,
-          role: emp.role,
-          deptId: emp.dept
-        };
-        s.screen = 'dashboard';
-        AF.render();
-        AF.toast(`Welcome, ${emp.name}! Logged in as ${role}.`, 'success');
-      };
-    });
+
 
     /* ── Login form submission ─────────────────────────────────── */
     const loginForm = document.getElementById('loginForm');
@@ -166,7 +132,7 @@ AF.ScreenAuth = {
 
         const emp = s.employees.find(em => em.email.toLowerCase() === email);
         if (!emp) {
-          AF.toast('No account found with that email. Try a demo role instead.', 'error');
+          AF.toast('No account found with that email.', 'error');
           return;
         }
 
