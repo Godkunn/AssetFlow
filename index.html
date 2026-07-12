@@ -49,30 +49,135 @@
     <button class="af-sim-btn" data-sim-width="375px">📱 Mobile</button>
   </div>
 
+  <!-- Draggable handle on right edge sibling to app container -->
+  <div class="af-sim-handle" id="simHandleRight"></div>
+
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       const btns = document.querySelectorAll('.af-sim-btn');
       const app = document.getElementById('app');
+      const handle = document.getElementById('simHandleRight');
       
+      let isDragging = false;
+
+      // ── CLICK SWITCHER BUTTONS ───────────────────────────────────
       btns.forEach(btn => {
         btn.onclick = () => {
           btns.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           
           const width = btn.dataset.simWidth;
-          if (width === '100%') {
-            app.style.setProperty('--af-sim-width', '100%');
-            app.style.setProperty('--af-sim-border', 'none');
-            app.style.setProperty('--af-sim-shadow', 'none');
-          } else {
-            app.style.setProperty('--af-sim-width', width);
-            app.style.setProperty('--af-sim-border', '1px solid var(--af-glass-border)');
-            app.style.setProperty('--af-sim-shadow', 'var(--af-shadow-lg), var(--af-purple-glow) 0 0 40px');
-          }
-          
-          // Force layout recalculations by dispatching resize event
-          window.dispatchEvent(new Event('resize'));
+          setSimWidth(width);
         };
+      });
+
+      function setSimWidth(width) {
+        if (width === '100%') {
+          document.documentElement.style.setProperty('--af-sim-width', '100%');
+          app.style.setProperty('--af-sim-border', 'none');
+          app.style.setProperty('--af-sim-shadow', 'none');
+        } else {
+          document.documentElement.style.setProperty('--af-sim-width', width);
+          app.style.setProperty('--af-sim-border', '1px solid var(--af-glass-border)');
+          app.style.setProperty('--af-sim-shadow', 'var(--af-shadow-lg), var(--af-purple-glow) 0 0 40px');
+        }
+        window.dispatchEvent(new Event('resize'));
+      }
+
+      function updateActiveBtn(widthVal) {
+        btns.forEach(b => {
+          if (b.dataset.simWidth === widthVal) {
+            b.classList.add('active');
+          } else {
+            b.classList.remove('active');
+          }
+        });
+      }
+
+      // ── MOUSE DRAG RESIZING ──────────────────────────────────────
+      handle.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        handle.classList.add('dragging');
+        document.body.style.cursor = 'ew-resize';
+        document.body.style.userSelect = 'none';
+        e.preventDefault();
+      });
+
+      document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        
+        const centerX = window.innerWidth / 2;
+        const pointerX = e.clientX;
+        
+        // Symmetrical width resizing centered on screen
+        let newWidth = Math.abs(pointerX - centerX) * 2;
+        const minWidth = 280;
+        const maxWidth = window.innerWidth;
+        newWidth = Math.max(minWidth, Math.min(newWidth, maxWidth));
+        
+        if (newWidth > maxWidth - 24) {
+          setSimWidth('100%');
+          updateActiveBtn('100%');
+        } else {
+          setSimWidth(newWidth + 'px');
+          
+          // Match nearest preset button
+          if (Math.abs(newWidth - 768) < 30) {
+            updateActiveBtn('768px');
+          } else if (Math.abs(newWidth - 375) < 30) {
+            updateActiveBtn('375px');
+          } else {
+            btns.forEach(b => b.classList.remove('active'));
+          }
+        }
+      });
+
+      document.addEventListener('mouseup', () => {
+        if (isDragging) {
+          isDragging = false;
+          handle.classList.remove('dragging');
+          document.body.style.cursor = '';
+          document.body.style.userSelect = '';
+        }
+      });
+
+      // ── TOUCH DRAG RESIZING ──────────────────────────────────────
+      handle.addEventListener('touchstart', (e) => {
+        isDragging = true;
+        handle.classList.add('dragging');
+        e.preventDefault();
+      });
+
+      document.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        const clientX = e.touches[0].clientX;
+        const centerX = window.innerWidth / 2;
+        
+        let newWidth = Math.abs(clientX - centerX) * 2;
+        const minWidth = 280;
+        const maxWidth = window.innerWidth;
+        newWidth = Math.max(minWidth, Math.min(newWidth, maxWidth));
+        
+        if (newWidth > maxWidth - 24) {
+          setSimWidth('100%');
+          updateActiveBtn('100%');
+        } else {
+          setSimWidth(newWidth + 'px');
+          if (Math.abs(newWidth - 768) < 30) {
+            updateActiveBtn('768px');
+          } else if (Math.abs(newWidth - 375) < 30) {
+            updateActiveBtn('375px');
+          } else {
+            btns.forEach(b => b.classList.remove('active'));
+          }
+        }
+      });
+
+      document.addEventListener('touchend', () => {
+        if (isDragging) {
+          isDragging = false;
+          handle.classList.remove('dragging');
+        }
       });
     });
   </script>

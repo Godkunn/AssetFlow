@@ -900,3 +900,34 @@
   }
 }
 
+/* ── Resizable Viewport Handle (After Effects style) ───────────── */
+.af-sim-handle {
+  position: fixed;
+  top: 0;
+  left: calc(50% + (var(--af-sim-width, 100%) / 2) - 6px);
+  width: 12px;
+  height: 100vh;
+  cursor: ew-resize;
+  z-index: 999999;
+  background: transparent;
+  pointer-events: auto;
+}
+
+.af-sim-handle::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 5px;
+  width: 2px;
+  height: 100%;
+  background: transparent;
+  transition: background var(--af-transition-fast), box-shadow var(--af-transition-fast);
+}
+
+.af-sim-handle:hover::after,
+.af-sim-handle.dragging::after {
+  background: var(--af-purple-light);
+  box-shadow: 0 0 10px var(--af-purple-glow);
+}
+
+
