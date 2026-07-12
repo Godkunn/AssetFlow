@@ -291,8 +291,7 @@
   backdrop-filter: blur(var(--af-glass-blur));
   -webkit-backdrop-filter: blur(var(--af-glass-blur));
   border-right: 1px solid var(--af-glass-border);
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: visible;
   flex-shrink: 0;
   transition: width var(--af-transition-slow),
               background var(--af-transition-base);
@@ -362,8 +361,10 @@
 
 /* Sidebar navigation */
 .af-side-nav {
-  padding: var(--af-space-md) var(--af-space-sm);
   flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--af-space-md) var(--af-space-sm);
   display: flex;
   flex-direction: column;
   gap: 2px;
