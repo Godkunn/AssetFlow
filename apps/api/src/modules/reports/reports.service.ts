@@ -44,4 +44,25 @@ export class ReportsService {
       returns
     };
   }
+
+  async exportReport(tenantId: string) {
+    const assets = await this.prisma.asset.findMany({
+      where: { tenantId },
+      include: { category: true }
+    });
+    
+    return {
+      tenantId,
+      exportedAt: new Date().toISOString(),
+      totalAssetsCount: assets.length,
+      assets: assets.map((a: any) => ({
+        tag: a.tag,
+        name: a.name,
+        category: a.category?.name || 'Uncategorized',
+        cost: a.cost,
+        status: a.status,
+        condition: a.condition
+      }))
+    };
+  }
 }

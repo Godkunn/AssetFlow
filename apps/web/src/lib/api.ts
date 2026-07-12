@@ -21,6 +21,7 @@ export const authAPI = {
 
 export const reportsAPI = {
   getDashboardKpis: () => api.get('/reports/dashboard').then(res => res.data),
+  exportReport: () => api.get('/reports/export').then(res => res.data),
 };
 
 export const orgAPI = {

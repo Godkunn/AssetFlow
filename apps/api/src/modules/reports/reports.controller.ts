@@ -12,4 +12,9 @@ export class ReportsController {
   getDashboardKpis(@Req() req: any) {
     return this.reportsService.getDashboardKpis(req.user.tenantId);
   }
+
+  @Get('export')
+  exportReport(@Req() req: any) {
+    return this.reportsService.exportReport(req.user.tenantId);
+  }
 }

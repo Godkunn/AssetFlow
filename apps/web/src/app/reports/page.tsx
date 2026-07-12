@@ -1,9 +1,12 @@
 "use client";
 
-import { useQuery } from '@tanstack/react-query';
-import { assetsAPI, maintenanceAPI, bookingAPI } from '@/lib/api';
+import { useState } from 'react';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { assetsAPI, maintenanceAPI, bookingAPI, reportsAPI } from '@/lib/api';
 
 export default function ReportsPage() {
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
   const { data: assets = [], isLoading: isLoadingAssets } = useQuery({
     queryKey: ['assets', 'All'],
     queryFn: () => assetsAPI.getAssets('All Assets'),
@@ -17,6 +20,43 @@ export default function ReportsPage() {
   const { data: bookings = [], isLoading: isLoadingBookings } = useQuery({
     queryKey: ['bookings'],
     queryFn: bookingAPI.getBookings,
+  });
+
+  const exportMutation = useMutation({
+    mutationFn: reportsAPI.exportReport,
+    onSuccess: (data: any) => {
+      // 1. Generate CSV content
+      const headers = ['Asset Tag', 'Asset Name', 'Category', 'Cost', 'Status', 'Condition'];
+      const rows = data.assets.map((a: any) => [
+        `"${a.tag}"`,
+        `"${a.name}"`,
+        `"${a.category}"`,
+        a.cost,
+        `"${a.status}"`,
+        `"${a.condition}"`
+      ]);
+      
+      const csvContent = [headers.join(','), ...rows.map((r: any) => r.join(','))].join('\n');
+      
+      // 2. Trigger download
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `AssetFlow_Report_${new Date().toISOString().slice(0, 10)}.csv`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // 3. Show premium Toast notification
+      setToastMessage('Report exported and downloaded successfully!');
+      setTimeout(() => setToastMessage(null), 3000);
+    },
+    onError: () => {
+      setToastMessage('Failed to export report. Please try again.');
+      setTimeout(() => setToastMessage(null), 3000);
+    }
   });
 
   const isLoading = isLoadingAssets || isLoadingTickets || isLoadingBookings;
@@ -67,9 +107,9 @@ export default function ReportsPage() {
           <h1 className="af-page-title">Reports &amp; Analytics</h1>
           <p className="af-page-subtitle">Operational insight across utilization, maintenance, and bookings.</p>
         </div>
-        <button className="af-btn af-btn-primary" onClick={() => alert('Report queued for export (PDF / Excel / CSV).')}>
+        <button className="af-btn af-btn-primary" onClick={() => exportMutation.mutate()} disabled={exportMutation.isPending}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Export Report
+          {exportMutation.isPending ? 'Exporting...' : 'Export Report'}
         </button>
       </div>
 
@@ -214,6 +254,31 @@ export default function ReportsPage() {
             </div>
           </div>
         </>
+      )}
+
+      {toastMessage && (
+        <div style={{
+          position: "fixed",
+          bottom: "24px",
+          right: "24px",
+          background: "var(--af-primary)",
+          color: "#fff",
+          padding: "12px 24px",
+          borderRadius: "8px",
+          fontSize: "14px",
+          fontWeight: 600,
+          boxShadow: "0 10px 25px rgba(139, 92, 246, 0.4)",
+          zIndex: 9999,
+          animation: "slideIn 0.3s ease",
+        }}>
+          {toastMessage}
+          <style>{`
+            @keyframes slideIn {
+              from { transform: translateY(100%) scale(0.9); opacity: 0; }
+              to { transform: translateY(0) scale(1); opacity: 1; }
+            }
+          `}</style>
+        </div>
       )}
     </div>
   );
