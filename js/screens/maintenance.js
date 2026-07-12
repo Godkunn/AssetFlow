@@ -17,12 +17,18 @@ AF.ScreenMaintenance = {
     };
 
     return `
-    <div class="af-page-enter">
-      <div class="af-breadcrumb">My Account / AssetFlow / Maintenance</div>
+    <div class="af-page">
+      <nav class="af-breadcrumb">
+        <span class="af-breadcrumb-item">My Account</span>
+        <span class="af-breadcrumb-sep">/</span>
+        <span class="af-breadcrumb-item">AssetFlow</span>
+        <span class="af-breadcrumb-sep">/</span>
+        <span class="af-breadcrumb-item active">Maintenance</span>
+      </nav>
       <div class="af-page-header">
         <div>
           <h1 class="af-page-title">Maintenance Pipeline</h1>
-          <p class="af-page-sub">Drag cards between columns to advance workflow. Resolving returns asset to Available.</p>
+          <p class="af-page-subtitle">Drag cards between columns to advance workflow. Resolving returns asset to Available.</p>
         </div>
         <button class="af-btn af-btn-primary" id="raiseMaintBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>

@@ -17,12 +17,18 @@ AF.ScreenBooking = {
     const hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17];
 
     return `
-    <div class="af-page-enter">
-      <div class="af-breadcrumb">My Account / AssetFlow / Booking</div>
+    <div class="af-page">
+      <nav class="af-breadcrumb">
+        <span class="af-breadcrumb-item">My Account</span>
+        <span class="af-breadcrumb-sep">/</span>
+        <span class="af-breadcrumb-item">AssetFlow</span>
+        <span class="af-breadcrumb-sep">/</span>
+        <span class="af-breadcrumb-item active">Booking</span>
+      </nav>
       <div class="af-page-header">
         <div>
           <h1 class="af-page-title">Resource Booking</h1>
-          <p class="af-page-sub">Time-slot booking with automatic overlap validation.</p>
+          <p class="af-page-subtitle">Time-slot booking with automatic overlap validation.</p>
         </div>
       </div>
 
@@ -35,7 +41,7 @@ AF.ScreenBooking = {
         <input type="date" class="af-input" id="bookingDate" value="${bookingState.date}" style="width:auto;" />
       </div>
 
-      <div class="af-content-grid af-grid-2">
+      <div class="af-grid-2col">
         <div class="af-card">
           <div class="af-card-header">
             <h3>${resource ? resource.name : 'Select resource'} · ${AF.formatDate(bookingState.date)}</h3>
@@ -98,7 +104,7 @@ AF.ScreenBooking = {
                 <div class="af-activity-item">
                   <div>
                     <span class="af-tag-chip">${b.resourceTag}</span>
-                    <span style="margin-left:8px;">${AF.formatDate(b.date)}, ${b.start}–${b.end}</span>
+                    <span style="margin-left:8px;">${AF.formatDate(b.date)}, ${b.start} to ${b.end}</span>
                   </div>
                   <div class="af-activity-meta">
                     ${b.by} · <span class="${AF.badgeClass(b.status)}">${b.status}</span>
@@ -122,7 +128,7 @@ AF.ScreenBooking = {
     const cls = isConflict ? 'af-slot-conflict' : 'af-slot-booked';
     const label = isConflict ? 'Conflict' : 'Booked';
     return `<div class="${cls}" style="top:${top}px;height:${height}px;">
-      ${label} · ${b.by || ''} · ${b.start}–${b.end}
+      ${label}: ${b.by || ''} (${b.start} to ${b.end})
     </div>`;
   },
 

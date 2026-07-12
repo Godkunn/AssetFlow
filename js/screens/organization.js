@@ -195,7 +195,7 @@ AF.ScreenOrganization = {
     if (addBtn) {
       addBtn.onclick = () => {
         if (orgTab === 'dept') AF.openModal('addDept');
-        else if (orgTab === 'cat') AF.openModal('addCategory');
+        else if (orgTab === 'cat') AF.openModal('addCat');
         else AF.openModal('addEmployee');
       };
     }

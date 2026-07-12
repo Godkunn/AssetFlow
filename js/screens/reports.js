@@ -34,12 +34,18 @@ AF.ScreenReports = {
     ];
 
     return `
-    <div class="af-page-enter">
-      <div class="af-breadcrumb">My Account / AssetFlow / Reports</div>
+    <div class="af-page">
+      <nav class="af-breadcrumb">
+        <span class="af-breadcrumb-item">My Account</span>
+        <span class="af-breadcrumb-sep">/</span>
+        <span class="af-breadcrumb-item">AssetFlow</span>
+        <span class="af-breadcrumb-sep">/</span>
+        <span class="af-breadcrumb-item active">Reports</span>
+      </nav>
       <div class="af-page-header">
         <div>
-          <h1 class="af-page-title">Reports & Analytics</h1>
-          <p class="af-page-sub">Operational insight across utilization, maintenance, and bookings.</p>
+          <h1 class="af-page-title">Reports &amp; Analytics</h1>
+          <p class="af-page-subtitle">Operational insight across utilization, maintenance, and bookings.</p>
         </div>
         <button class="af-btn" id="exportBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
@@ -67,7 +73,7 @@ AF.ScreenReports = {
         </div>
       </div>
 
-      <div class="af-content-grid af-grid-2">
+      <div class="af-grid-2col">
         <!-- Utilization by category -->
         <div class="af-card">
           <div class="af-card-header"><h3>Utilization by Category</h3></div>
@@ -121,7 +127,7 @@ AF.ScreenReports = {
         </div>
       </div>
 
-      <div class="af-content-grid af-grid-2" style="margin-top:16px;">
+      <div class="af-grid-2col" style="margin-top:16px;">
         <!-- Most used assets -->
         <div class="af-card">
           <div class="af-card-header"><h3>Most Used Assets</h3></div>

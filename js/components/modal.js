@@ -34,6 +34,36 @@ AF.Modal = {
           </div>`;
         break;
 
+      case 'addEmployee':
+        title = 'Add Employee';
+        body = `
+          <div class="af-field">
+            <label class="af-label">Full name</label>
+            <input class="af-input" id="mEmpName" placeholder="e.g. Priya Shah" />
+          </div>
+          <div class="af-field">
+            <label class="af-label">Email address</label>
+            <input type="email" class="af-input" id="mEmpEmail" placeholder="e.g. priya.shah@company.com" />
+          </div>
+          <div class="af-field-row">
+            <div class="af-field">
+              <label class="af-label">Department</label>
+              <select class="af-select" id="mEmpDept">
+                ${AF.state.departments.map(d => `<option>${d.name}</option>`).join('')}
+              </select>
+            </div>
+            <div class="af-field">
+              <label class="af-label">Role</label>
+              <select class="af-select" id="mEmpRole">
+                <option>Employee</option>
+                <option>Department Head</option>
+                <option>Asset Manager</option>
+                <option>Admin</option>
+              </select>
+            </div>
+          </div>`;
+        break;
+
       case 'addCat':
         title = 'Add Asset Category';
         body = `
@@ -208,6 +238,23 @@ AF.Modal = {
         });
         AF.addLog(AF.state.session.name, 'Created department', name);
         AF.toast('Department created successfully.');
+        break;
+      }
+
+      case 'addEmployee': {
+        const name = document.getElementById('mEmpName').value.trim();
+        const email = document.getElementById('mEmpEmail').value.trim();
+        if (!name || !email) { AF.toast('Enter name and email.', 'error'); return; }
+        AF.state.employees.push({
+          id: AF.uid('e'),
+          name,
+          email,
+          dept: document.getElementById('mEmpDept').value,
+          role: document.getElementById('mEmpRole').value,
+          status: 'Active'
+        });
+        AF.addLog(AF.state.session.name, 'Added employee', name);
+        AF.toast('Employee added successfully.');
         break;
       }
 

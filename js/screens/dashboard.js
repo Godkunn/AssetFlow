@@ -92,7 +92,7 @@ AF.ScreenDashboard = {
           <div class="af-kpi af-kpi-${k.color}">
             <div class="af-kpi-icon">${k.icon}</div>
             <div class="af-kpi-body">
-              <span class="af-kpi-value" data-count-to="${k.value}">${k.formatted || '0'}</span>
+              <span class="af-kpi-value" data-count-to="${k.value}">${k.formatted || k.value}</span>
               <span class="af-kpi-label">${k.label}</span>
             </div>
           </div>
@@ -103,7 +103,7 @@ AF.ScreenDashboard = {
       <div class="af-overdue-banner">
         <span class="af-pulse-dot"></span>
         <span class="af-overdue-text">
-          <strong>3 assets overdue</strong> for scheduled return — please follow up with holders.
+          <strong>3 assets overdue</strong> for scheduled return. Please follow up with asset holders.
         </span>
         <button class="af-btn af-btn-sm af-btn-ghost" data-quick-action="assets">View assets</button>
       </div>
@@ -123,7 +123,7 @@ AF.ScreenDashboard = {
           </svg>
           Book Resource
         </button>
-        <button class="af-btn af-btn-outline" data-quick-action="raiseMaintenance">
+        <button class="af-btn af-btn-secondary" data-quick-action="raiseMaintenance">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
           </svg>

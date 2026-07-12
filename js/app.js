@@ -37,8 +37,9 @@ AF.render = function () {
   app.className = 'af-app';
   app.innerHTML = `
     ${AF.Topbar.render()}
-    <div class="af-body">
+    <div class="af-app-body">
       ${AF.Sidebar.render()}
+      <div class="af-sidebar-overlay ${s.sidebarOpen ? 'visible' : ''}" id="sidebarOverlay"></div>
       <main class="af-main" id="mainContent">
         ${screen.render()}
       </main>
@@ -53,6 +54,14 @@ AF.render = function () {
   AF.Modal.bind();
   AF.ToastRenderer.bind();
   screen.bind();
+
+  const overlay = document.getElementById('sidebarOverlay');
+  if (overlay) {
+    overlay.onclick = () => {
+      AF.state.sidebarOpen = false;
+      AF.render();
+    };
+  }
 };
 
 /* ── Keyboard shortcuts ──────────────────────────────────────────── */

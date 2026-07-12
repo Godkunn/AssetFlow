@@ -7,12 +7,18 @@ AF.ScreenAudit = {
     const cycle = AF.state.audits[0];
     if (!cycle) {
       return `
-      <div class="af-page-enter">
-        <div class="af-breadcrumb">My Account / AssetFlow / Audit</div>
+      <div class="af-page">
+        <nav class="af-breadcrumb">
+          <span class="af-breadcrumb-item">My Account</span>
+          <span class="af-breadcrumb-sep">/</span>
+          <span class="af-breadcrumb-item">AssetFlow</span>
+          <span class="af-breadcrumb-sep">/</span>
+          <span class="af-breadcrumb-item active">Audit</span>
+        </nav>
         <div class="af-page-header">
           <div>
             <h1 class="af-page-title">Asset Audit</h1>
-            <p class="af-page-sub">No audit cycles created yet.</p>
+            <p class="af-page-subtitle">No audit cycles created yet.</p>
           </div>
           ${['Admin', 'Asset Manager'].includes(AF.state.session.role) ?
             `<button class="af-btn af-btn-primary" id="newAuditBtn">
@@ -35,12 +41,18 @@ AF.ScreenAudit = {
     const pct = total > 0 ? Math.round((verified / total) * 100) : 0;
 
     return `
-    <div class="af-page-enter">
-      <div class="af-breadcrumb">My Account / AssetFlow / Audit</div>
+    <div class="af-page">
+      <nav class="af-breadcrumb">
+        <span class="af-breadcrumb-item">My Account</span>
+        <span class="af-breadcrumb-sep">/</span>
+        <span class="af-breadcrumb-item">AssetFlow</span>
+        <span class="af-breadcrumb-sep">/</span>
+        <span class="af-breadcrumb-item active">Audit</span>
+      </nav>
       <div class="af-page-header">
         <div>
           <h1 class="af-page-title">Asset Audit Cycle</h1>
-          <p class="af-page-sub">${cycle.name}: ${cycle.dateRange} · Auditors: ${cycle.auditors.join(', ')}</p>
+          <p class="af-page-subtitle">${cycle.name}: ${cycle.dateRange} · Auditors: ${cycle.auditors.join(', ')}</p>
         </div>
         <div style="display:flex;gap:8px;">
           ${['Admin', 'Asset Manager'].includes(AF.state.session.role) ?

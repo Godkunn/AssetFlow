@@ -22,12 +22,18 @@ AF.ScreenNotifications = {
     const unreadCount = s.notifications.filter(n => !n.read).length;
 
     return `
-    <div class="af-page-enter">
-      <div class="af-breadcrumb">My Account / AssetFlow / Notifications</div>
+    <div class="af-page">
+      <nav class="af-breadcrumb">
+        <span class="af-breadcrumb-item">My Account</span>
+        <span class="af-breadcrumb-sep">/</span>
+        <span class="af-breadcrumb-item">AssetFlow</span>
+        <span class="af-breadcrumb-sep">/</span>
+        <span class="af-breadcrumb-item active">Notifications</span>
+      </nav>
       <div class="af-page-header">
         <div>
-          <h1 class="af-page-title">Notifications & Activity Log</h1>
-          <p class="af-page-sub">Every role stays informed without digging for updates.</p>
+          <h1 class="af-page-title">Notifications &amp; Activity Log</h1>
+          <p class="af-page-subtitle">Every role stays informed without digging for updates.</p>
         </div>
         ${unreadCount > 0 ? `
           <button class="af-btn af-btn-ghost" id="markAllReadBtn">
@@ -45,7 +51,7 @@ AF.ScreenNotifications = {
         `).join('')}
       </div>
 
-      <div class="af-content-grid af-grid-2">
+      <div class="af-grid-2col">
         <!-- Notification center -->
         <div class="af-card">
           <div class="af-card-header">
