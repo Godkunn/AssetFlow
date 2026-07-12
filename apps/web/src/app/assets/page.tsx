@@ -120,59 +120,64 @@ export default function AssetsPage() {
             </thead>
             <tbody>
               {isLoading ? (
-                <tr><td colSpan={6} className="af-empty-state">Loading assets...</td></tr>
+                Array.from({ length: 5 }).map((_, idx) => (
+                  <tr key={idx}>
+                    <td><div className="af-skeleton" style={{ width: '65px', height: '22px', borderRadius: '4px' }} /></td>
+                    <td><div className="af-skeleton" style={{ width: '160px', height: '18px', borderRadius: '4px' }} /></td>
+                    <td><div className="af-skeleton" style={{ width: '90px', height: '18px', borderRadius: '4px' }} /></td>
+                    <td><div className="af-skeleton" style={{ width: '80px', height: '22px', borderRadius: '99px' }} /></td>
+                    <td><div className="af-skeleton" style={{ width: '120px', height: '18px', borderRadius: '4px' }} /></td>
+                    <td><div className="af-skeleton" style={{ width: '50px', height: '18px', borderRadius: '4px' }} /></td>
+                  </tr>
+                ))
               ) : assets.length === 0 ? (
                 <tr><td colSpan={6} className="af-empty-state">No assets match your filters.</td></tr>
-              ) : assets.map((asset) => {
-                const activeAllocation = asset.allocations?.[0];
+              ) : (
+                assets.map((asset) => {
+                  const activeAllocation = asset.allocations?.[0];
 
-                return (
-                  <tr key={asset.id} className="af-row-clickable">
-                    <td>
-                      <span className="af-tag-chip">{asset.tag}</span>
-                    </td>
-                    <td>
-                      <strong>{asset.name}</strong>
-                    </td>
-                    <td>{asset.category?.name || 'Uncategorized'}</td>
-                    <td>
-                      <span className={`af-badge ${getStatusClass(asset.status)}`}>
-                        {asset.status}
-                      </span>
-                    </td>
-                    <td>
-                      {asset.status === 'ALLOCATED' && activeAllocation ? (
-                        <div
-                          style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '8px',
-                          }}
-                        >
-                          <span className="af-avatar af-avatar-xs">
-                            {activeAllocation.user?.name?.charAt(0) || 'U'}
-                          </span>
+                  return (
+                    <tr key={asset.id} className="af-row-clickable">
+                      <td>
+                        <span className="af-tag-chip">{asset.tag}</span>
+                      </td>
 
-                          <span>
-                            {activeAllocation.user?.name ||
-                              activeAllocation.user?.email}
-                          </span>
-                        </div>
-                      ) : (
-                        <span className="af-text-muted">—</span>
-                      )}
-                    </td>
-                    <td>
-                      <button
-                        className="af-btn af-btn-ghost af-btn-sm"
-                        title="View details"
-                      >
-                        Details
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
+                      <td>
+                        <strong>{asset.name}</strong>
+                      </td>
+
+                      <td>{asset.category?.name || 'Uncategorized'}</td>
+
+                      <td>
+                        <span className={`af-badge ${getStatusClass(asset.status)}`}>
+                          {asset.status}
+                        </span>
+                      </td>
+
+                      <td>
+                        {asset.status === 'ALLOCATED' && activeAllocation ? (
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <span className="af-avatar af-avatar-xs">
+                              {activeAllocation.user?.name?.charAt(0) || 'U'}
+                            </span>
+                            <span>
+                              {activeAllocation.user?.name || activeAllocation.user?.email}
+                            </span>
+                          </div>
+                        ) : (
+                          <span className="af-text-muted">—</span>
+                        )}
+                      </td>
+
+                      <td>
+                        <button className="af-btn af-btn-ghost af-btn-sm" title="View details">
+                          Details
+                        </button>
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
         </div>
@@ -180,8 +185,8 @@ export default function AssetsPage() {
 
       {/* Add Asset Modal */}
       {showModal && (
-        <div className="af-modal-overlay" onClick={() => setShowModal(false)} style={{ cursor: 'pointer' }}>
-          <div className="af-modal" onClick={e => e.stopPropagation()} style={{ cursor: 'default' }}>
+        <div className="af-modal-overlay">
+          <div className="af-modal">
             <div className="af-modal-header">
               <h3 className="af-modal-title">Register Asset</h3>
               <button className="af-modal-close" onClick={() => setShowModal(false)}>×</button>
@@ -207,7 +212,7 @@ export default function AssetsPage() {
                 </div>
                 <div className="af-field">
                   <label className="af-label">Cost ($)</label>
-                  <input required type="number" className="af-input" value={newAsset.cost} onChange={e => setNewAsset({...newAsset, cost: parseFloat(e.target.value)})} />
+                  <input required type="number" className="af-input" value={newAsset.cost} onChange={e => setNewAsset({...newAsset, cost: parseFloat(e.target.value) || 0})} />
                 </div>
                 <div className="af-modal-footer">
                   <button type="button" className="af-btn af-btn-secondary" onClick={() => setShowModal(false)}>Cancel</button>

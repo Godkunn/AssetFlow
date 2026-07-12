@@ -70,7 +70,13 @@ export default function AuditPage() {
             <h3>Audit Cycles</h3>
           </div>
           <div className="af-card-body">
-            {isLoading ? <p className="af-empty-state">Loading...</p> : audits.length === 0 ? (
+            {isLoading ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                <div className="af-skeleton" style={{ height: '48px', borderRadius: '8px' }} />
+                <div className="af-skeleton" style={{ height: '48px', borderRadius: '8px' }} />
+                <div className="af-skeleton" style={{ height: '48px', borderRadius: '8px' }} />
+              </div>
+            ) : audits.length === 0 ? (
               <div className="af-empty-state">
                 <p>No audit cycles created yet.</p>
               </div>

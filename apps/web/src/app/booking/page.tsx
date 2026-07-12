@@ -80,7 +80,18 @@ export default function BookingPage() {
               </tr>
             </thead>
             <tbody>
-              {isLoading ? <tr><td colSpan={6} className="af-empty-state">Loading...</td></tr> : bookings.length === 0 ? (
+              {isLoading ? (
+                Array.from({ length: 4 }).map((_, idx) => (
+                  <tr key={idx}>
+                    <td><div className="af-skeleton" style={{ width: '130px', height: '18px', borderRadius: '4px' }} /></td>
+                    <td><div className="af-skeleton" style={{ width: '100px', height: '18px', borderRadius: '4px' }} /></td>
+                    <td><div className="af-skeleton" style={{ width: '140px', height: '18px', borderRadius: '4px' }} /></td>
+                    <td><div className="af-skeleton" style={{ width: '140px', height: '18px', borderRadius: '4px' }} /></td>
+                    <td><div className="af-skeleton" style={{ width: '80px', height: '22px', borderRadius: '99px' }} /></td>
+                    <td><div className="af-skeleton" style={{ width: '50px', height: '22px', borderRadius: '4px' }} /></td>
+                  </tr>
+                ))
+              ) : bookings.length === 0 ? (
                 <tr><td colSpan={6} className="af-empty-state">No bookings found.</td></tr>
               ) : bookings.map((b: any) => (
                 <tr key={b.id}>

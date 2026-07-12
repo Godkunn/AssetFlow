@@ -1,4 +1,4 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Req, Res, UseGuards } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 
@@ -72,5 +72,11 @@ export class AuthController {
   async githubAuthRedirect(@Req() req: any, @Res() res: any) {
     const authResult = await this.authService.validateOAuthUser(req.user);
     res.send(makeAuthResponse('GitHub', authResult));
+  }
+
+  /* ─── Credentials Login ─────────────────────────────────────────── */
+  @Post('credentials')
+  async credentialsLogin(@Body() body: any) {
+    return this.authService.validateCredentials(body);
   }
 }

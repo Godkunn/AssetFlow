@@ -126,7 +126,11 @@ export default function AllocationPage() {
             </div>
             <div className="af-card-body af-card-body-flush">
               {isLoadingAlloc ? (
-                <p className="af-empty-state">Loading allocations...</p>
+                <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <div className="af-skeleton" style={{ height: '36px', borderRadius: '6px' }} />
+                  <div className="af-skeleton" style={{ height: '36px', borderRadius: '6px' }} />
+                  <div className="af-skeleton" style={{ height: '36px', borderRadius: '6px' }} />
+                </div>
               ) : allocations.length === 0 ? (
                 <p className="af-empty-state">No active allocations.</p>
               ) : (
@@ -170,7 +174,10 @@ export default function AllocationPage() {
             </div>
             <div className="af-card-body af-card-body-flush">
               {isLoadingTrans ? (
-                <p className="af-empty-state">Loading transfers...</p>
+                <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                  <div className="af-skeleton" style={{ height: '70px', borderRadius: '8px' }} />
+                  <div className="af-skeleton" style={{ height: '70px', borderRadius: '8px' }} />
+                </div>
               ) : transfers.length === 0 ? (
                 <p className="af-empty-state">No transfer requests.</p>
               ) : (

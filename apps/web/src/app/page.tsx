@@ -10,10 +10,6 @@ export default function DashboardPage() {
     queryFn: reportsAPI.getDashboardKpis,
   });
 
-  if (isLoading) {
-    return <div className="p-8 text-center text-gray-400">Loading Dashboard...</div>;
-  }
-
   // Fallback defaults if API fails or is empty
   const metrics = kpis || {
     totalAssets: 0,
@@ -25,11 +21,11 @@ export default function DashboardPage() {
   };
 
   // Calculate Available assets
-  const availableAssets = Math.max(0, metrics.totalAssets - metrics.allocations - metrics.maintenance) || 128;
-  const allocatedAssets = metrics.allocations || 76;
-  const maintenanceAssets = metrics.maintenance || 4;
-  const activeBookings = metrics.returns || 9;
-  const pendingTransfers = metrics.transfers || 3;
+  const availableAssets = Math.max(0, metrics.totalAssets - metrics.allocations - metrics.maintenance);
+  const allocatedAssets = metrics.allocations;
+  const maintenanceAssets = metrics.maintenance;
+  const activeBookings = metrics.returns;
+  const pendingTransfers = metrics.transfers;
   const upcomingReturns = 12; // as specified in Excalidraw mockup
 
   return (
@@ -52,21 +48,39 @@ export default function DashboardPage() {
         {/* Row 1 */}
         <div className="af-kpi af-kpi-emerald">
           <div className="af-kpi-body">
-            <span className="af-kpi-value">{availableAssets}</span>
+            <span className="af-kpi-value">
+              {isLoading ? (
+                <span className="af-skeleton" style={{ width: '60px', height: '36px', display: 'block', borderRadius: '6px' }} />
+              ) : (
+                availableAssets
+              )}
+            </span>
             <span className="af-kpi-label">Available</span>
           </div>
         </div>
 
         <div className="af-kpi af-kpi-purple">
           <div className="af-kpi-body">
-            <span className="af-kpi-value">{allocatedAssets}</span>
+            <span className="af-kpi-value">
+              {isLoading ? (
+                <span className="af-skeleton" style={{ width: '60px', height: '36px', display: 'block', borderRadius: '6px' }} />
+              ) : (
+                allocatedAssets
+              )}
+            </span>
             <span className="af-kpi-label">Allocated</span>
           </div>
         </div>
 
         <div className="af-kpi af-kpi-amber">
           <div className="af-kpi-body">
-            <span className="af-kpi-value">{maintenanceAssets}</span>
+            <span className="af-kpi-value">
+              {isLoading ? (
+                <span className="af-skeleton" style={{ width: '60px', height: '36px', display: 'block', borderRadius: '6px' }} />
+              ) : (
+                maintenanceAssets
+              )}
+            </span>
             <span className="af-kpi-label">Under Maintenance</span>
           </div>
         </div>
@@ -74,21 +88,39 @@ export default function DashboardPage() {
         {/* Row 2 */}
         <div className="af-kpi af-kpi-sky">
           <div className="af-kpi-body">
-            <span className="af-kpi-value">{activeBookings}</span>
+            <span className="af-kpi-value">
+              {isLoading ? (
+                <span className="af-skeleton" style={{ width: '60px', height: '36px', display: 'block', borderRadius: '6px' }} />
+              ) : (
+                activeBookings
+              )}
+            </span>
             <span className="af-kpi-label">Active Bookings</span>
           </div>
         </div>
 
         <div className="af-kpi af-kpi-teal">
           <div className="af-kpi-body">
-            <span className="af-kpi-value">{pendingTransfers}</span>
+            <span className="af-kpi-value">
+              {isLoading ? (
+                <span className="af-skeleton" style={{ width: '60px', height: '36px', display: 'block', borderRadius: '6px' }} />
+              ) : (
+                pendingTransfers
+              )}
+            </span>
             <span className="af-kpi-label">Pending Transfers</span>
           </div>
         </div>
         
         <div className="af-kpi af-kpi-gold">
           <div className="af-kpi-body">
-            <span className="af-kpi-value">{upcomingReturns}</span>
+            <span className="af-kpi-value">
+              {isLoading ? (
+                <span className="af-skeleton" style={{ width: '60px', height: '36px', display: 'block', borderRadius: '6px' }} />
+              ) : (
+                upcomingReturns
+              )}
+            </span>
             <span className="af-kpi-label">Upcoming returns</span>
           </div>
         </div>
@@ -96,8 +128,8 @@ export default function DashboardPage() {
 
       {/* Overdue alert banner */}
       <div style={{
-        background: 'rgba(239, 68, 68, 0.1)',
-        border: '1px solid rgba(239, 68, 68, 0.3)',
+        background: 'rgba(239, 68, 68, 0.08)',
+        border: '1px solid rgba(239, 68, 68, 0.2)',
         borderRadius: '12px',
         padding: '14px 20px',
         display: 'flex',
@@ -157,18 +189,28 @@ export default function DashboardPage() {
           <h3 className="af-card-title" style={{ fontSize: '18px', fontWeight: 600, fontFamily: 'Sora, sans-serif' }}>Recent Activity</h3>
         </div>
         <div className="af-card-body" style={{ display: 'flex', flexDirection: 'column', gap: '16px', padding: '8px 4px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14px', color: '#E2E8F0' }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10B981' }} />
-            <span>Laptop <strong>AF-0114</strong> - allocated to Priya shah - IT dept</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14px', color: '#E2E8F0' }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#3B82F6' }} />
-            <span>Room <strong>B2</strong> - booking confirmed - 2:00 to 3:00 PM</span>
-          </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14px', color: '#E2E8F0' }}>
-            <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#F59E0B' }} />
-            <span>Projector <strong>AF-0062</strong> - maintenance resolved</span>
-          </div>
+          {isLoading ? (
+            <>
+              <div className="af-skeleton" style={{ height: '16px', width: '85%', borderRadius: '4px' }} />
+              <div className="af-skeleton" style={{ height: '16px', width: '70%', borderRadius: '4px' }} />
+              <div className="af-skeleton" style={{ height: '16px', width: '90%', borderRadius: '4px' }} />
+            </>
+          ) : (
+            <>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14px', color: '#E2E8F0' }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#10B981' }} />
+                <span>Laptop <strong>AF-0114</strong> - allocated to Priya shah - IT dept</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14px', color: '#E2E8F0' }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#3B82F6' }} />
+                <span>Room <strong>B2</strong> - booking confirmed - 2:00 to 3:00 PM</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px', fontSize: '14px', color: '#E2E8F0' }}>
+                <span style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#F59E0B' }} />
+                <span>Projector <strong>AF-0062</strong> - maintenance resolved</span>
+              </div>
+            </>
+          )}
         </div>
       </div>
       

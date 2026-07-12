@@ -109,4 +109,19 @@ export class AuthService {
       },
     };
   }
+
+  async validateCredentials(body: { email: string; password?: string }) {
+    const { email, password } = body;
+    if (password !== 'demo1234') {
+      throw new Error('Invalid credentials');
+    }
+    const namePart = email.split('@')[0];
+    const firstName = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+    const lastName = 'User';
+    return this.validateOAuthUser({
+      email,
+      firstName,
+      lastName,
+    });
+  }
 }

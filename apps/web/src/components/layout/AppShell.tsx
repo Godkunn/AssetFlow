@@ -25,6 +25,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     }
   }, [status, isLoginPage, router]);
 
+  useEffect(() => {
+    if (status === "authenticated" && (session as any)?.backendToken) {
+      localStorage.setItem("af_token", (session as any).backendToken);
+    } else if (status === "unauthenticated") {
+      localStorage.removeItem("af_token");
+    }
+  }, [status, session]);
+
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

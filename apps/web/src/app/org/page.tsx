@@ -145,7 +145,14 @@ export default function OrganizationSetupPage() {
               </thead>
               <tbody>
                 {isLoadingDepts ? (
-                  <tr><td colSpan={4} className="af-empty-state">Loading departments...</td></tr>
+                  Array.from({ length: 4 }).map((_, idx) => (
+                    <tr key={idx}>
+                      <td><div className="af-skeleton" style={{ width: '130px', height: '18px', borderRadius: '4px' }} /></td>
+                      <td><div className="af-skeleton" style={{ width: '100px', height: '18px', borderRadius: '4px' }} /></td>
+                      <td><div className="af-skeleton" style={{ width: '90px', height: '18px', borderRadius: '4px' }} /></td>
+                      <td><div className="af-skeleton" style={{ width: '70px', height: '22px', borderRadius: '99px' }} /></td>
+                    </tr>
+                  ))
                 ) : departments.length === 0 ? (
                   <tr><td colSpan={4} className="af-empty-state">No departments configured.</td></tr>
                 ) : (
@@ -178,7 +185,14 @@ export default function OrganizationSetupPage() {
               </thead>
               <tbody>
                 {isLoadingCats ? (
-                  <tr><td colSpan={4} className="af-empty-state">Loading categories...</td></tr>
+                  Array.from({ length: 4 }).map((_, idx) => (
+                    <tr key={idx}>
+                      <td><div className="af-skeleton" style={{ width: '120px', height: '18px', borderRadius: '4px' }} /></td>
+                      <td><div className="af-skeleton" style={{ width: '60px', height: '18px', borderRadius: '4px' }} /></td>
+                      <td><div className="af-skeleton" style={{ width: '80px', height: '18px', borderRadius: '4px' }} /></td>
+                      <td><div className="af-skeleton" style={{ width: '70px', height: '22px', borderRadius: '99px' }} /></td>
+                    </tr>
+                  ))
                 ) : categories.length === 0 ? (
                   <tr><td colSpan={4} className="af-empty-state">No categories configured.</td></tr>
                 ) : (
@@ -207,7 +221,14 @@ export default function OrganizationSetupPage() {
               </thead>
               <tbody>
                 {isLoadingEmps ? (
-                  <tr><td colSpan={4} className="af-empty-state">Loading employees...</td></tr>
+                  Array.from({ length: 4 }).map((_, idx) => (
+                    <tr key={idx}>
+                      <td><div className="af-skeleton" style={{ width: '130px', height: '18px', borderRadius: '4px' }} /></td>
+                      <td><div className="af-skeleton" style={{ width: '160px', height: '18px', borderRadius: '4px' }} /></td>
+                      <td><div className="af-skeleton" style={{ width: '110px', height: '18px', borderRadius: '4px' }} /></td>
+                      <td><div className="af-skeleton" style={{ width: '90px', height: '18px', borderRadius: '4px' }} /></td>
+                    </tr>
+                  ))
                 ) : employees.length === 0 ? (
                   <tr><td colSpan={4} className="af-empty-state">No employees in directory.</td></tr>
                 ) : (
@@ -226,19 +247,7 @@ export default function OrganizationSetupPage() {
         </div>
       </div>
 
-      {/* Note Callout */}
-      <div style={{
-        marginTop: '24px',
-        padding: '12px 18px',
-        background: 'rgba(139, 92, 246, 0.05)',
-        borderLeft: '3px solid var(--af-purple)',
-        borderRadius: '0 8px 8px 0',
-        fontSize: '14px',
-        color: 'var(--af-text-secondary)',
-        fontStyle: 'italic'
-      }}>
-        Editing a department here also drives the picklist in Screen 4 & 5
-      </div>
+
 
       {/* Add Modal */}
       {showModal && (

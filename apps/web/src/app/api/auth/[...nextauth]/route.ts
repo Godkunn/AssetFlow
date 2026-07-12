@@ -14,39 +14,32 @@ export const authOptions = {
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // Demo users — replace with real DB lookup in production
-        const DEMO_USERS = [
-          {
-            id: "1",
-            name: "Admin User",
-            email: "admin@assetflow.io",
-            password: "demo1234",
-            role: "admin",
-            image: null,
-          },
-          {
-            id: "2",
-            name: "Sarah Chen",
-            email: "sarah@assetflow.io",
-            password: "demo1234",
-            role: "manager",
-            image: null,
-          },
-        ];
+        try {
+          const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000'}/auth/credentials`, {
+            method: 'POST',
+            body: JSON.stringify({
+              email: credentials?.email,
+              password: credentials?.password,
+            }),
+            headers: { 'Content-Type': 'application/json' },
+          });
 
-        const user = DEMO_USERS.find(
-          (u) =>
-            u.email === credentials?.email &&
-            u.password === credentials?.password
-        );
+          if (!res.ok) return null;
 
-        if (user) {
-          return {
-            id: user.id,
-            name: user.name,
-            email: user.email,
-            image: user.image,
-          };
+          const data = await res.json();
+          if (data && data.token && data.user) {
+            return {
+              id: data.user.id,
+              name: data.user.name,
+              email: data.user.email,
+              role: data.user.role,
+              tenantId: data.user.tenantId,
+              tenantName: data.user.tenantName,
+              backendToken: data.token,
+            };
+          }
+        } catch (e) {
+          console.error('Credentials authorization error:', e);
         }
         return null;
       },
@@ -73,12 +66,20 @@ export const authOptions = {
     async jwt({ token, user }: any) {
       if (user) {
         token.id = user.id;
+        token.role = (user as any).role;
+        token.tenantId = (user as any).tenantId;
+        token.tenantName = (user as any).tenantName;
+        token.backendToken = (user as any).backendToken;
       }
       return token;
     },
     async session({ session, token }: any) {
       if (token && session.user) {
         session.user.id = token.id as string;
+        session.user.role = token.role as string;
+        session.user.tenantId = token.tenantId as string;
+        session.user.tenantName = token.tenantName as string;
+        session.backendToken = token.backendToken as string;
       }
       return session;
     },
