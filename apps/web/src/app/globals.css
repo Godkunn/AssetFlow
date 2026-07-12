@@ -1682,7 +1682,8 @@ pre code {
     padding-right: 0 !important;
   }
 
-  .af-sidebar-toggle {
+  .af-sidebar-toggle,
+  .af-sidebar-resizer {
     display: none !important;
   }
 

@@ -15,11 +15,8 @@ export default function Topbar({ session, onToggleSidebar }: TopbarProps) {
   const router = useRouter();
 
   const [theme, setTheme] = useState<'dark' | 'light'>('dark');
-  const [showProfileModal, setShowProfileModal] = useState(false);
   const [currentName, setCurrentName] = useState(session?.user?.name || "Admin");
   const [currentEmail, setCurrentEmail] = useState(session?.user?.email || "");
-  const [editName, setEditName] = useState(session?.user?.name || "Admin");
-  const [editEmail, setEditEmail] = useState(session?.user?.email || "");
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -31,14 +28,26 @@ export default function Topbar({ session, onToggleSidebar }: TopbarProps) {
   }, []);
 
   useEffect(() => {
-    if (session?.user?.name) {
-      setCurrentName(session.user.name);
-      setEditName(session.user.name);
-    }
-    if (session?.user?.email) {
-      setCurrentEmail(session.user.email);
-      setEditEmail(session.user.email);
-    }
+    const loadProfile = () => {
+      const savedName = localStorage.getItem('af-profile-name');
+      const savedEmail = localStorage.getItem('af-profile-email');
+      if (savedName) {
+        setCurrentName(savedName);
+      } else if (session?.user?.name) {
+        setCurrentName(session.user.name);
+      }
+      if (savedEmail) {
+        setCurrentEmail(savedEmail);
+      } else if (session?.user?.email) {
+        setCurrentEmail(session.user.email);
+      }
+    };
+
+    loadProfile();
+    window.addEventListener('profile-updated', loadProfile);
+    return () => {
+      window.removeEventListener('profile-updated', loadProfile);
+    };
   }, [session]);
 
   const toggleTheme = () => {
@@ -74,7 +83,12 @@ export default function Topbar({ session, onToggleSidebar }: TopbarProps) {
             <line x1="3" y1="18" x2="21" y2="18" />
           </svg>
         </button>
-        <div className="af-topbar-logo">
+        <div className="af-topbar-logo" onClick={(e) => {
+          if (window.innerWidth <= 768 && onToggleSidebar) {
+            e.preventDefault();
+            onToggleSidebar();
+          }
+        }} style={{ cursor: "pointer" }}>
           <Link href="/" style={{ display: "flex", alignItems: "center", gap: "10px", textDecoration: "none" }}>
             <div style={{
               width: "28px",
@@ -180,11 +194,7 @@ export default function Topbar({ session, onToggleSidebar }: TopbarProps) {
           </svg>
         </Link>
 
-        <div className="af-topbar-user" onClick={() => {
-          setEditName(currentName);
-          setEditEmail(currentEmail);
-          setShowProfileModal(true);
-        }} style={{ cursor: "pointer" }}>
+        <Link href="/profile" className="af-topbar-user" style={{ textDecoration: 'none' }}>
           {userImage ? (
             <img
               src={userImage}
@@ -201,6 +211,7 @@ export default function Topbar({ session, onToggleSidebar }: TopbarProps) {
               {currentEmail || "Tenant Admin"}
             </span>
           </div>
+        </Link>
           <button
             className="af-topbar-bell"
             onClick={(e) => {
@@ -224,113 +235,6 @@ export default function Topbar({ session, onToggleSidebar }: TopbarProps) {
             </svg>
           </button>
         </div>
-      </div>
-
-      {showProfileModal && (
-        <div 
-          className="af-modal-overlay" 
-          onClick={() => setShowProfileModal(false)}
-          style={{ cursor: "pointer", position: "fixed", inset: 0, zIndex: 1000 }}
-        >
-          <div 
-            className="af-modal" 
-            onClick={(e) => e.stopPropagation()} 
-            style={{ cursor: "default", maxWidth: "420px" }}
-          >
-            <div className="af-modal-header">
-              <h3>Edit Profile</h3>
-              <button className="af-modal-close" onClick={() => setShowProfileModal(false)}>&times;</button>
-            </div>
-            <div className="af-modal-body" style={{ display: "flex", flexDirection: "column", gap: "16px", padding: "20px 0" }}>
-              <div style={{ display: "flex", justifyContent: "center", marginBottom: "8px" }}>
-                <div style={{
-                  width: "64px",
-                  height: "64px",
-                  borderRadius: "50%",
-                  background: "var(--af-primary)",
-                  color: "#fff",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "24px",
-                  fontWeight: 700,
-                  boxShadow: "0 4px 12px rgba(139, 92, 246, 0.3)"
-                }}>
-                  {initials}
-                </div>
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                <label style={{ fontSize: "12px", fontWeight: 600, color: "var(--af-text-muted)" }}>Full Name</label>
-                <input 
-                  type="text" 
-                  className="af-input" 
-                  value={editName}
-                  onChange={(e) => setEditName(e.target.value)}
-                />
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                <label style={{ fontSize: "12px", fontWeight: 600, color: "var(--af-text-muted)" }}>Email Address</label>
-                <input 
-                  type="email" 
-                  className="af-input" 
-                  value={editEmail}
-                  onChange={(e) => setEditEmail(e.target.value)}
-                />
-              </div>
-              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                <label style={{ fontSize: "12px", fontWeight: 600, color: "var(--af-text-muted)" }}>Role</label>
-                <input 
-                  type="text" 
-                  className="af-input" 
-                  value="Tenant Admin (Acme India)" 
-                  disabled 
-                  style={{ background: "var(--af-surface-hover)", cursor: "not-allowed" }}
-                />
-              </div>
-            </div>
-            <div className="af-modal-footer">
-              <button className="af-btn af-btn-outline" onClick={() => setShowProfileModal(false)}>Cancel</button>
-              <button 
-                className="af-btn af-btn-primary" 
-                onClick={() => {
-                  setCurrentName(editName);
-                  setCurrentEmail(editEmail);
-                  setShowProfileModal(false);
-                  setToastMessage("Profile updated successfully!");
-                  setTimeout(() => setToastMessage(null), 3000);
-                }}
-              >
-                Save Changes
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {toastMessage && (
-        <div style={{
-          position: "fixed",
-          bottom: "24px",
-          right: "24px",
-          background: "var(--af-primary)",
-          color: "#fff",
-          padding: "12px 24px",
-          borderRadius: "8px",
-          fontSize: "14px",
-          fontWeight: 600,
-          boxShadow: "0 10px 25px rgba(139, 92, 246, 0.4)",
-          zIndex: 9999,
-          animation: "slideIn 0.3s ease",
-        }}>
-          {toastMessage}
-          <style>{`
-            @keyframes slideIn {
-              from { transform: translateY(100%) scale(0.9); opacity: 0; }
-              to { transform: translateY(0) scale(1); opacity: 1; }
-            }
-          `}</style>
-        </div>
-      )}
     </header>
   );
 }

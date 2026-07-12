@@ -59,6 +59,7 @@ export default function Sidebar({ collapsed, setCollapsed, open, setOpen }: Side
     let startWidth = 0;
 
     const onMouseDown = (e: MouseEvent) => {
+      if (window.innerWidth <= 768) return;
       isDragging = true;
       resizer.classList.add('dragging');
       nav.classList.add('dragging');
@@ -104,6 +105,7 @@ export default function Sidebar({ collapsed, setCollapsed, open, setOpen }: Side
 
     // Touch Support for mobile dragging
     const onTouchStart = (e: TouchEvent) => {
+      if (window.innerWidth <= 768) return;
       isDragging = true;
       resizer.classList.add('dragging');
       nav.classList.add('dragging');
