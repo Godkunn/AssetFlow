@@ -114,6 +114,7 @@ AF.Sidebar = {
       resizer.addEventListener('mousedown', (e) => {
         isDragging = true;
         resizer.classList.add('dragging');
+        sidebar.classList.add('dragging');
         startX = e.clientX;
         startWidth = sidebar.offsetWidth;
         document.body.style.cursor = 'col-resize';
@@ -149,6 +150,7 @@ AF.Sidebar = {
         if (isDragging) {
           isDragging = false;
           resizer.classList.remove('dragging');
+          sidebar.classList.remove('dragging');
           document.body.style.cursor = '';
           document.body.style.userSelect = '';
           document.removeEventListener('mousemove', onMouseMove);
@@ -168,6 +170,7 @@ AF.Sidebar = {
       resizer.addEventListener('touchstart', (e) => {
         isDragging = true;
         resizer.classList.add('dragging');
+        sidebar.classList.add('dragging');
         startX = e.touches[0].clientX;
         startWidth = sidebar.offsetWidth;
         e.preventDefault();
@@ -197,6 +200,7 @@ AF.Sidebar = {
         if (isDragging) {
           isDragging = false;
           resizer.classList.remove('dragging');
+          sidebar.classList.remove('dragging');
           document.removeEventListener('touchmove', onTouchMove);
           document.removeEventListener('touchend', onTouchEnd);
           AF.render();

@@ -74,6 +74,81 @@ AF.ScreenReports = {
       </div>
 
       <div class="af-grid-2col">
+        <!-- Cost Distribution by Department (Donut Chart) -->
+        <div class="af-card">
+          <div class="af-card-header"><h3>Portfolio Cost by Department</h3></div>
+          <div class="af-card-body" style="display:flex;align-items:center;gap:20px;">
+            <div style="position:relative;width:150px;height:150px;flex-shrink:0;">
+              <svg viewBox="0 0 36 36" style="width:100%;height:100%;transform:rotate(-90deg);">
+                <circle cx="18" cy="18" r="15.915" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3.5"></circle>
+                <!-- Eng: 45% (dasharray 45 55) -->
+                <circle cx="18" cy="18" r="15.915" fill="none" stroke="var(--af-purple)" stroke-width="3.5" stroke-dasharray="45 55" stroke-dashoffset="0"></circle>
+                <!-- Design: 25% (dasharray 25 75, offset -45) -->
+                <circle cx="18" cy="18" r="15.915" fill="none" stroke="var(--af-sky)" stroke-width="3.5" stroke-dasharray="25 75" stroke-dashoffset="-45"></circle>
+                <!-- IT: 15% (dasharray 15 85, offset -70) -->
+                <circle cx="18" cy="18" r="15.915" fill="none" stroke="var(--af-emerald)" stroke-width="3.5" stroke-dasharray="15 85" stroke-dashoffset="-70"></circle>
+                <!-- Sales/HR: 15% (dasharray 15 85, offset -85) -->
+                <circle cx="18" cy="18" r="15.915" fill="none" stroke="var(--af-amber)" stroke-width="3.5" stroke-dasharray="15 85" stroke-dashoffset="-85"></circle>
+              </svg>
+              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
+                <div style="font-size:16px;font-weight:700;color:var(--af-text-primary);">$6.2K</div>
+                <div style="font-size:9px;color:var(--af-text-muted);text-transform:uppercase;">Cost</div>
+              </div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:8px;font-size:12px;">
+              <div style="display:flex;justify-content:between;align-items:center;">
+                <span><span style="display:inline-block;width:10px;height:10px;background:var(--af-purple);border-radius:2px;margin-right:6px;"></span>Engineering</span>
+                <span style="font-weight:600;margin-left:auto;">$2,790 (45%)</span>
+              </div>
+              <div style="display:flex;justify-content:between;align-items:center;">
+                <span><span style="display:inline-block;width:10px;height:10px;background:var(--af-sky);border-radius:2px;margin-right:6px;"></span>Design</span>
+                <span style="font-weight:600;margin-left:auto;">$1,550 (25%)</span>
+              </div>
+              <div style="display:flex;justify-content:between;align-items:center;">
+                <span><span style="display:inline-block;width:10px;height:10px;background:var(--af-emerald);border-radius:2px;margin-right:6px;"></span>IT Support</span>
+                <span style="font-weight:600;margin-left:auto;">$930 (15%)</span>
+              </div>
+              <div style="display:flex;justify-content:between;align-items:center;">
+                <span><span style="display:inline-block;width:10px;height:10px;background:var(--af-amber);border-radius:2px;margin-right:6px;"></span>HR / Sales</span>
+                <span style="font-weight:600;margin-left:auto;">$930 (15%)</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Asset Condition Health index -->
+        <div class="af-card">
+          <div class="af-card-header"><h3>Asset Condition &amp; Risk Health Index</h3></div>
+          <div class="af-card-body">
+            <div style="display:flex;flex-direction:column;gap:12px;margin-bottom:12px;">
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+                  <span style="color:var(--af-emerald-light);font-weight:600;">Excellent (Grade A)</span>
+                  <span style="color:var(--af-text-secondary);">60% of inventory</span>
+                </div>
+                <div class="af-chart-bar-track" style="height:8px;background:rgba(255,255,255,0.05);"><div style="height:100%;width:60%;background:var(--af-emerald);border-radius:4px;"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+                  <span style="color:var(--af-amber);font-weight:600;">Minor Wear (Grade B)</span>
+                  <span style="color:var(--af-text-secondary);">25% of inventory</span>
+                </div>
+                <div class="af-chart-bar-track" style="height:8px;background:rgba(255,255,255,0.05);"><div style="height:100%;width:25%;background:var(--af-amber);border-radius:4px;"></div></div>
+              </div>
+              <div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;">
+                  <span style="color:var(--af-rose-light);font-weight:600;">Critical Risk / Nearing Retirement (Grade C)</span>
+                  <span style="color:var(--af-text-secondary);">15% of inventory</span>
+                </div>
+                <div class="af-chart-bar-track" style="height:8px;background:rgba(255,255,255,0.05);"><div style="height:100%;width:15%;background:var(--af-rose);border-radius:4px;"></div></div>
+              </div>
+            </div>
+            <div class="af-hint">Audit verification rating is 98.2% positive accuracy.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="af-grid-2col" style="margin-top:16px;">
         <!-- Utilization by category -->
         <div class="af-card">
           <div class="af-card-header"><h3>Utilization by Category</h3></div>

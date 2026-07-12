@@ -59,4 +59,18 @@ export class AuthController {
     const authResult = await this.authService.validateOAuthUser(req.user);
     res.send(makeAuthResponse('Discord', authResult));
   }
+
+  /* ─── GitHub OAuth ──────────────────────────────────────────────── */
+  @Get('github')
+  @UseGuards(AuthGuard('github'))
+  async githubAuth(@Req() req: any) {
+    // Initiates the GitHub OAuth flow
+  }
+
+  @Get('github/callback')
+  @UseGuards(AuthGuard('github'))
+  async githubAuthRedirect(@Req() req: any, @Res() res: any) {
+    const authResult = await this.authService.validateOAuthUser(req.user);
+    res.send(makeAuthResponse('GitHub', authResult));
+  }
 }
