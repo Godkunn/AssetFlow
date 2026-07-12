@@ -374,7 +374,7 @@ export default function LoginPage() {
           <img
             src="/assets/logo.png"
             alt="AssetFlow"
-            style={{ width: 44, height: 44, borderRadius: 10, objectFit: "cover", boxShadow: "0 0 20px rgba(139,92,246,0.4)" }}
+            style={{ width: 44, height: 44, borderRadius: 10, objectFit: "cover", boxShadow: "0 0 20px rgba(139,92,246,0.4)", mixBlendMode: "screen" }}
           />
           <div>
             <div style={{ fontWeight: 800, fontSize: "22px", color: "#F1EEFF", fontFamily: "'Sora', sans-serif", letterSpacing: "-0.5px" }}>

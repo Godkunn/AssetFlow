@@ -70,6 +70,7 @@ export default function Topbar({ session, onToggleSidebar }: TopbarProps) {
                 borderRadius: "6px",
                 objectFit: "cover",
                 flexShrink: 0,
+                mixBlendMode: "screen",
               }}
             />
             <span style={{ fontWeight: 700, fontSize: "18px", color: "var(--af-text)", letterSpacing: "-0.5px" }}>
