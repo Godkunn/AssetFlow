@@ -273,15 +273,16 @@ AF.ScreenAuth = {
 
       AF.toast(`Connecting to ${provider} OAuth...`, 'info');
 
-      // Create a centered pop-up window to simulate OAuth redirection
+      // Create a centered pop-up window to redirect to NestJS OAuth or simulate it
       const w = 500, h = 600;
       const left = (window.screen.width / 2) - (w / 2);
       const top = (window.screen.height / 2) - (h / 2);
       
-      const oauthWindow = window.open('', `${provider} OAuth`, `width=${w},height=${h},top=${top},left=${left}`);
+      const popupUrl = provider === 'Google' ? 'http://localhost:4000/auth/google' : '';
+      const oauthWindow = window.open(popupUrl, `${provider} OAuth`, `width=${w},height=${h},top=${top},left=${left}`);
       
-      // Inject simulated OAuth consent page into pop-up
-      if (oauthWindow) {
+      // Inject simulated OAuth consent page into pop-up if no real url is loaded
+      if (oauthWindow && !popupUrl) {
         oauthWindow.document.write(`
           <html>
           <head>
@@ -365,18 +366,33 @@ AF.ScreenAuth = {
       if (e.data && e.data.type === 'oauth-success') {
         window.removeEventListener('message', handleOauthMessage);
         
-        // Login as default admin session upon successful authorization
-        const adminEmp = s.employees.find(em => em.role === 'Admin') || s.employees[0];
-        s.session = {
-          name: adminEmp.name,
-          email: adminEmp.email,
-          role: adminEmp.role,
-          deptId: adminEmp.dept
-        };
+        // Log in using real session parameters from database if provided
+        const sessionUser = e.data.session;
+        if (sessionUser) {
+          s.session = {
+            name: sessionUser.name,
+            email: sessionUser.email,
+            role: sessionUser.role === 'TENANT_ADMIN' ? 'Admin' : 'Employee',
+            deptId: 'dept-hq'
+          };
+          if (e.data.token) {
+            localStorage.setItem('af_token', e.data.token);
+          }
+        } else {
+          // Fallback to default admin session upon successful simulated authorization
+          const adminEmp = s.employees.find(em => em.role === 'Admin') || s.employees[0];
+          s.session = {
+            name: adminEmp.name,
+            email: adminEmp.email,
+            role: adminEmp.role,
+            deptId: adminEmp.dept
+          };
+        }
+        
         s.screen = 'dashboard';
-        AF.addLog(adminEmp.name, `Authenticated via ${e.data.provider} OAuth`, adminEmp.role);
+        AF.addLog(s.session.name, `Authenticated via ${e.data.provider} OAuth`, s.session.role);
         AF.render();
-        AF.toast(`Successfully authenticated via ${e.data.provider}! Welcome, ${adminEmp.name.split(' ')[0]}.`, 'success');
+        AF.toast(`Successfully authenticated via ${e.data.provider}! Welcome, ${s.session.name.split(' ')[0]}.`, 'success');
       }
     };
     window.addEventListener('message', handleOauthMessage);
