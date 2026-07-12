@@ -1,0 +1,37 @@
+import { Controller, Get, Post, Body, Patch, Param, Req } from '@nestjs/common';
+import { OrgSetupService } from './org-setup.service';
+
+@Controller('org')
+export class OrgSetupController {
+  constructor(private readonly orgSetupService: OrgSetupService) {}
+
+  @Get('departments')
+  getDepartments(@Req() req: any) {
+    return this.orgSetupService.getDepartments(req.user.tenantId);
+  }
+
+  @Post('departments')
+  createDepartment(@Req() req: any, @Body() data: any) {
+    return this.orgSetupService.createDepartment(req.user.tenantId, data);
+  }
+
+  @Get('categories')
+  getCategories(@Req() req: any) {
+    return this.orgSetupService.getCategories(req.user.tenantId);
+  }
+
+  @Post('categories')
+  createCategory(@Req() req: any, @Body() data: any) {
+    return this.orgSetupService.createCategory(req.user.tenantId, data);
+  }
+
+  @Get('employees')
+  getEmployees(@Req() req: any) {
+    return this.orgSetupService.getEmployees(req.user.tenantId);
+  }
+
+  @Patch('employees/:id')
+  updateEmployee(@Req() req: any, @Param('id') id: string, @Body() data: any) {
+    return this.orgSetupService.updateEmployee(req.user.tenantId, id, data);
+  }
+}

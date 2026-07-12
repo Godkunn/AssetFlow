@@ -7,15 +7,15 @@ import { AuthService } from './auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  @Get('google')
-  @UseGuards(AuthGuard('google'))
-  async googleAuth(@Req() req: any) {
-    // Initiates the Google OAuth flow
+  @Get('discord')
+  @UseGuards(AuthGuard('discord'))
+  async discordAuth(@Req() req: any) {
+    // Initiates the Discord OAuth flow
   }
 
-  @Get('google/callback')
-  @UseGuards(AuthGuard('google'))
-  async googleAuthRedirect(@Req() req: any, @Res() res: any) {
+  @Get('discord/callback')
+  @UseGuards(AuthGuard('discord'))
+  async discordAuthRedirect(@Req() req: any, @Res() res: any) {
     const authResult = await this.authService.validateOAuthUser(req.user);
     
     // Respond with a script that posts the session to the parent window and closes the popup
@@ -30,10 +30,10 @@ export class AuthController {
           if (window.opener) {
             window.opener.postMessage({
               type: 'oauth-success',
-              provider: 'Google',
+              provider: 'Discord',
               token: '${authResult.token}',
               session: ${JSON.stringify(authResult.user)}
-            }, '*');
+            }, '${process.env.FRONTEND_URL || 'http://localhost:3001'}');
             window.close();
           } else {
             document.body.innerHTML = '<h2>Authentication Successful! You can close this tab.</h2>';

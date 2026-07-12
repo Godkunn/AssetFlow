@@ -14,60 +14,122 @@ model Tenant {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  users       User[]
-  assets      Asset[]
-  allocations Allocation[]
-  bookings    Booking[]
-  auditLogs   AuditLog[]
+  users              User[]
+  assets             Asset[]
+  allocations        Allocation[]
+  bookings           Booking[]
+  auditLogs          AuditLog[]
+  departments        Department[]
+  categories         Category[]
+  maintenanceTickets MaintenanceTicket[]
+  transfers          Transfer[]
+  auditCycles        AuditCycle[]
+  auditItems         AuditItem[]
+  notifications      Notification[]
 }
 
 // ── Users & Roles ──
 enum Role {
   SUPER_ADMIN
   TENANT_ADMIN
+  DEPARTMENT_HEAD
+  ASSET_MANAGER
   EMPLOYEE
 }
 
 model User {
   id        String   @id @default(uuid())
-  email     String   @unique
+  email     String
   name      String
   role      Role     @default(EMPLOYEE)
   tenantId  String
   tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  discordId String?
 
-  allocations Allocation[]
-  bookings    Booking[]
-  auditLogs   AuditLog[]
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+
+  allocations          Allocation[]
+  bookings             Booking[]
+  auditLogs            AuditLog[]
+  notifications        Notification[]
+  maintenanceAssigned  MaintenanceTicket[] @relation("Technician")
+
+  // Scoped unique: same email allowed in different tenants (contractor scenario)
+  @@unique([email, tenantId])
+}
+
+// ── Organization ──
+model Department {
+  id        String   @id @default(uuid())
+  name      String
+  head      String?
+  parentId  String?
+  parent    Department?  @relation("DepartmentHierarchy", fields: [parentId], references: [id])
+  children  Department[] @relation("DepartmentHierarchy")
+  status    String   @default("Active")
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users  User[]
+}
+
+model Category {
+  id        String   @id @default(uuid())
+  name      String
+  extra     String?
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  assets Asset[]
 }
 
 // ── Assets ──
 enum AssetStatus {
   AVAILABLE
   ALLOCATED
+  RESERVED
   MAINTENANCE
   RETIRED
+  LOST
 }
 
 model Asset {
   id           String      @id @default(uuid())
+  tag          String
   name         String
-  sku          String      @unique
-  serialNumber String?     @unique
+  serialNumber String?
   status       AssetStatus @default(AVAILABLE)
+  location     String?
+  cost         Float?
+  condition    String?
+  acqDate      DateTime?
+  shared       Boolean     @default(false)
+  
+  categoryId   String?
+  category     Category?   @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   tenantId     String
   tenant       Tenant      @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   createdAt    DateTime    @default(now())
   updatedAt    DateTime    @updatedAt
 
-  allocations Allocation[]
-  bookings    Booking[]
-  auditLogs   AuditLog[]
+  allocations        Allocation[]
+  bookings           Booking[]
+  auditLogs          AuditLog[]
+  maintenanceTickets MaintenanceTicket[]
+  transfers          Transfer[]
+  auditItems         AuditItem[]
+
+  @@unique([tag, tenantId])
 }
 
-// ── Allocations (Check-out / Check-in) ──
+// ── Allocations & Transfers ──
 model Allocation {
   id          String    @id @default(uuid())
   assetId     String
@@ -81,7 +143,21 @@ model Allocation {
   notes       String?
 }
 
-// ── Bookings (Future Reservations) ──
+model Transfer {
+  id          String    @id @default(uuid())
+  assetId     String
+  asset       Asset     @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  from        String
+  to          String
+  reason      String?
+  status      String    @default("Pending") // Pending, Approved, Rejected
+  tenantId    String
+  tenant      Tenant    @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+// ── Bookings ──
 model Booking {
   id          String   @id @default(uuid())
   assetId     String
@@ -92,10 +168,67 @@ model Booking {
   tenant      Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
   startTime   DateTime
   endTime     DateTime
+  status      String   @default("Upcoming") // Upcoming, Ongoing, Completed, Cancelled
   createdAt   DateTime @default(now())
+}
 
-  // Note: Exclusion constraints for preventing overlap 
-  // must be added via raw SQL migration (tsrange).
+// ── Maintenance ──
+model MaintenanceTicket {
+  id           String   @id @default(uuid())
+  assetId      String
+  asset        Asset    @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  issue        String
+  priority     String   @default("Medium") // Low, Medium, High, Critical
+  stage        String   @default("Pending") // Pending, Approved, Technician Assigned, In Progress, Resolved
+  technicianId String?
+  technician   User?    @relation("Technician", fields: [technicianId], references: [id], onDelete: SetNull)
+  tenantId     String
+  tenant       Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// ── Audits ──
+model AuditCycle {
+  id        String   @id @default(uuid())
+  name      String
+  scope     String?
+  dateRange String?
+  auditors  String[] // Array of strings or relation to users
+  closed    Boolean  @default(false)
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items     AuditItem[]
+}
+
+model AuditItem {
+  id           String     @id @default(uuid())
+  auditCycleId String
+  auditCycle   AuditCycle @relation(fields: [auditCycleId], references: [id], onDelete: Cascade)
+  assetId      String
+  asset        Asset      @relation(fields: [assetId], references: [id], onDelete: Cascade)
+  expected     String?
+  verdict      String     @default("Pending") // Pending, Verified, Missing, Damaged
+  tenantId     String
+  tenant       Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+}
+
+// ── Notifications ──
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  text      String
+  type      String   // Alerts, Approvals, Bookings
+  read      Boolean  @default(false)
+  tenantId  String
+  tenant    Tenant   @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
 }
 
 // ── Audit Log ──

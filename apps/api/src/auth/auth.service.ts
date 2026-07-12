@@ -16,8 +16,9 @@ export class AuthService {
     lastName: string;
     picture?: string;
   }) {
-    // 1. Check if user already exists
-    let user = await this.prisma.user.findUnique({
+    // 1. Check if user already exists by resolving tenant first
+    // We do an initial lookup by email to find any existing record for this oauth user
+    let user = await this.prisma.user.findFirst({
       where: { email: oauthUser.email },
       include: { tenant: true },
     });
