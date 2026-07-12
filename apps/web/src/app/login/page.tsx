@@ -516,13 +516,29 @@ export default function LoginPage() {
             {/* Card header */}
             <div style={{ marginBottom: 32 }}>
               <h2 style={{ fontSize: 26, fontWeight: 800, color: "#F1EEFF", margin: "0 0 8px", fontFamily: "'Sora', sans-serif", letterSpacing: "-0.02em" }}>
-                {isLogin ? "Welcome back 👋" : "Join AssetFlow ✨"}
+                {isLogin ? "Welcome back" : "Join AssetFlow"}
               </h2>
               <p style={{ color: "#A89EC8", fontSize: 14, margin: 0 }}>
                 {isLogin
                   ? "Sign in to your workspace"
                   : "Create your organization account"}
               </p>
+            </div>
+
+            {/* OAuth Troubleshooting Notice */}
+            <div style={{
+              background: "rgba(245, 158, 11, 0.05)",
+              border: "1px solid rgba(245, 158, 11, 0.18)",
+              borderRadius: 12,
+              padding: "14px 18px",
+              marginBottom: 24,
+              fontSize: 12,
+              color: "#FBBF24",
+              lineHeight: "1.6",
+              fontFamily: "var(--font-inter), sans-serif",
+            }}>
+              <span style={{ fontWeight: 700, display: "block", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.03em", fontSize: 10 }}>OAuth Configuration Note</span>
+              To authenticate via Google, Discord, or GitHub, ensure you have registered the port 3000 callback URIs in your developer console. Otherwise, use the pre-populated credentials below to login instantly.
             </div>
 
             {/* ── OAuth buttons ── */}
@@ -761,7 +777,7 @@ export default function LoginPage() {
           z-index: 5;
           border-right: 1px solid rgba(139,92,246,0.12);
           justify-content: space-between;
-          overflow: hidden;
+          overflow-y: auto;
         }
 
         .bottom-stats-row {
