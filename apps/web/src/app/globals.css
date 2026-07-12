@@ -1631,35 +1631,59 @@ pre code {
   }
 
   .af-sidebar {
-    position: fixed;
+    position: relative !important;
     left: 0;
-    top: 60px;
+    top: 0;
     bottom: 0;
-    width: 240px;
-    z-index: var(--af-z-overlay);
-    transform: translateX(-100%);
-    transition: transform var(--af-transition-slow), width 0s;
+    width: 68px !important;
+    transform: none !important;
+    transition: width var(--af-transition-slow) !important;
+    z-index: 99 !important;
   }
 
   .af-sidebar.open {
-    transform: translateX(0);
+    position: absolute !important;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 240px !important;
+    z-index: var(--af-z-overlay) !important;
+    transform: none !important;
+    box-shadow: var(--af-shadow-lg) !important;
   }
 
+  /* Make sure labels and badges are visible only when open on mobile */
   .af-sidebar.open .af-side-label,
-  .af-sidebar.open .af-side-section,
+  .af-sidebar.open .af-side-section-label,
   .af-sidebar.open .af-side-link-badge {
-    opacity: 1;
-    width: auto;
+    opacity: 1 !important;
+    width: auto !important;
+    overflow: visible !important;
+    transition: opacity var(--af-transition-base) !important;
+  }
+
+  .af-sidebar:not(.open) .af-side-label,
+  .af-sidebar:not(.open) .af-side-section-label,
+  .af-sidebar:not(.open) .af-side-link-badge {
+    opacity: 0 !important;
+    width: 0 !important;
+    overflow: hidden !important;
   }
 
   .af-sidebar.open .af-side-link {
-    justify-content: flex-start;
-    padding-left: 12px;
-    padding-right: 12px;
+    justify-content: flex-start !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .af-sidebar:not(.open) .af-side-link {
+    justify-content: center !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
   }
 
   .af-sidebar-toggle {
-    display: none;
+    display: none !important;
   }
 
   .af-topbar-hamburger {
@@ -1670,12 +1694,48 @@ pre code {
     padding: var(--af-space-md);
   }
 
-  .af-content-grid.cols-2,
-  .af-content-grid.cols-3,
-  .af-content-grid.cols-2-1,
-  .af-content-grid.cols-1-2,
+  .af-content-grid {
+    gap: var(--af-space-xs) !important;
+  }
+
+  .af-content-grid.cols-2 {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
+  .af-content-grid.cols-3 {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+
+  .af-content-grid.cols-2-1 {
+    grid-template-columns: 1.8fr 1fr !important;
+  }
+
+  .af-content-grid.cols-1-2 {
+    grid-template-columns: 1fr 1.8fr !important;
+  }
+
   .af-content-grid.cols-3-1 {
-    grid-template-columns: 1fr;
+    grid-template-columns: 2fr 1fr !important;
+  }
+
+  /* Compact KPI cards for mobile grids */
+  .af-kpi {
+    padding: 8px 12px !important;
+    min-height: auto !important;
+  }
+
+  .af-kpi-value {
+    font-size: 20px !important;
+  }
+
+  .af-kpi-label {
+    font-size: 11px !important;
+  }
+
+  .af-kpi-body {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   .af-page-header {

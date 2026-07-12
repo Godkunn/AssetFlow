@@ -165,7 +165,7 @@ export default function Sidebar({ collapsed, setCollapsed, open, setOpen }: Side
             position: 'fixed',
             inset: 0,
             background: 'rgba(0,0,0,0.5)',
-            zIndex: 199,
+            zIndex: 299,
           }}
         />
       )}
