@@ -269,7 +269,7 @@ AF.ScreenAuth = {
       const config = window.AF_CONFIG || {};
       const clientId = provider === 'Google' ? config.googleClientId 
                      : provider === 'Microsoft' ? config.microsoftClientId 
-                     : config.discordClientId;
+                     : config.githubClientId;
 
       AF.toast(`Connecting to ${provider} OAuth...`, 'info');
 
