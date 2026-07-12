@@ -29,6 +29,8 @@ export default function AssetsPage() {
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState('All Assets');
   
+  const [search, setSearch] = useState('');
+  
   // Add Asset Modal State
   const [showModal, setShowModal] = useState(false);
   const [newAsset, setNewAsset] = useState({ tag: '', name: '', categoryId: '', cost: 0 });
@@ -41,6 +43,16 @@ export default function AssetsPage() {
   const { data: categories = [] } = useQuery<Category[]>({
     queryKey: ['categories'],
     queryFn: orgAPI.getCategories,
+  });
+
+  const filteredAssets = assets.filter((asset) => {
+    const searchLower = search.toLowerCase();
+    return (
+      asset.tag.toLowerCase().includes(searchLower) ||
+      asset.name.toLowerCase().includes(searchLower) ||
+      (asset.category?.name || '').toLowerCase().includes(searchLower) ||
+      (asset.allocations?.[0]?.user?.name || '').toLowerCase().includes(searchLower)
+    );
   });
 
   const addAssetMutation = useMutation({
@@ -57,7 +69,8 @@ export default function AssetsPage() {
     e.preventDefault();
     addAssetMutation.mutate({
       ...newAsset,
-      cost: parseFloat(newAsset.cost.toString()),
+      categoryId: newAsset.categoryId || undefined,
+      cost: parseFloat(newAsset.cost.toString()) || 0,
     });
   };
 
@@ -79,7 +92,7 @@ export default function AssetsPage() {
       <div className="af-page-header">
         <div>
           <h1 className="af-page-title">Asset Registry</h1>
-          <p className="af-page-subtitle">{assets.length} assets</p>
+          <p className="af-page-subtitle">{filteredAssets.length} assets</p>
         </div>
         <button className="af-btn af-btn-primary" onClick={() => setShowModal(true)}>
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -94,7 +107,13 @@ export default function AssetsPage() {
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="af-filter-icon">
             <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
           </svg>
-          <input type="text" className="af-input af-input-search" placeholder="Search by tag, name, or holder…" />
+          <input 
+            type="text" 
+            className="af-input af-input-search" 
+            placeholder="Search by tag, name, or holder…" 
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+          />
         </div>
         <select className="af-select" value={filter} onChange={e => setFilter(e.target.value)}>
           <option value="All Assets">All Assets</option>
@@ -102,7 +121,7 @@ export default function AssetsPage() {
           <option value="Allocated">Allocated</option>
           <option value="Maintenance">Maintenance</option>
         </select>
-        <span className="af-filter-count">{assets.length} results</span>
+        <span className="af-filter-count">{filteredAssets.length} results</span>
       </div>
 
       <div className="af-card">
@@ -130,10 +149,10 @@ export default function AssetsPage() {
                     <td><div className="af-skeleton" style={{ width: '50px', height: '18px', borderRadius: '4px' }} /></td>
                   </tr>
                 ))
-              ) : assets.length === 0 ? (
+              ) : filteredAssets.length === 0 ? (
                 <tr><td colSpan={6} className="af-empty-state">No assets match your filters.</td></tr>
               ) : (
-                assets.map((asset) => {
+                filteredAssets.map((asset) => {
                   const activeAllocation = asset.allocations?.[0];
 
                   return (
