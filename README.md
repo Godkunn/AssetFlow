@@ -67,7 +67,7 @@ Since "every company" will use this, the tenancy strategy drives almost everythi
 ### 🎨 Frontend
 - **Framework:** React + TypeScript (Next.js for SSR/SEO on marketing/login pages, CSR for the app shell).
 - **State/Data:** TanStack Query (server cache) + Zustand (client/UI state).
-- **UI Kit:** Tailwind CSS + Radix Primitives — matches our ultra-modern Odoo-style design tokens.
+- **UI Kit:** Tailwind CSS + Radix Primitives -- matches our ultra-modern Odoo-style design tokens.
 - **Forms:** React Hook Form + Zod schema validation.
 - **Complex UI:** TanStack Table (datagrids), dnd-kit (kanban drag), FullCalendar (booking overlap UI).
 - **Charts:** Recharts or ECharts for reports/heatmaps.
