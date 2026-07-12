@@ -324,22 +324,7 @@ export default function LoginPage() {
     return () => window.removeEventListener("mousemove", onMove);
   }, []);
 
-  /* Check for OAuth callback / redirect_uri errors in URL query string */
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const err = params.get("error");
-      if (err) {
-        if (err.includes("OAuth") || err.includes("Callback") || err.includes("Signin")) {
-          setError(
-            "OAuth Callback Error: Please verify that you have registered 'http://localhost:3000/api/auth/callback/google' (or github / discord) as an Authorized Redirect URI in your OAuth app console."
-          );
-        } else {
-          setError(`Authentication error: ${err}`);
-        }
-      }
-    }
-  }, []);
+
 
   const handleOAuth = async (provider: string) => {
     setLoading(provider);
@@ -525,21 +510,7 @@ export default function LoginPage() {
               </p>
             </div>
 
-            {/* OAuth Troubleshooting Notice */}
-            <div style={{
-              background: "rgba(245, 158, 11, 0.05)",
-              border: "1px solid rgba(245, 158, 11, 0.18)",
-              borderRadius: 12,
-              padding: "14px 18px",
-              marginBottom: 24,
-              fontSize: 12,
-              color: "#FBBF24",
-              lineHeight: "1.6",
-              fontFamily: "var(--font-inter), sans-serif",
-            }}>
-              <span style={{ fontWeight: 700, display: "block", marginBottom: 4, textTransform: "uppercase", letterSpacing: "0.03em", fontSize: 10 }}>OAuth Configuration Note</span>
-              To authenticate via Google, Discord, or GitHub, ensure you have registered the port 3000 callback URIs in your developer console. Otherwise, use the pre-populated credentials below to login instantly.
-            </div>
+
 
             {/* ── OAuth buttons ── */}
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 10, marginBottom: 24 }}>
