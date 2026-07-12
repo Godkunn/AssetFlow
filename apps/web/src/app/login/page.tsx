@@ -746,7 +746,7 @@ export default function LoginPage() {
           padding: 40px 52px;
           position: relative;
           z-index: 5;
-          border-right: 1px solid rgba(139,92,246,0.12);
+          border-right: none;
           justify-content: space-between;
           overflow-y: auto;
         }
@@ -826,7 +826,7 @@ export default function LoginPage() {
             width: 100%;
             padding: 32px 24px;
             border-right: none;
-            border-bottom: 1px solid rgba(139,92,246,0.12);
+            border-bottom: none;
           }
           .bottom-stats-row {
             gap: 20px;
