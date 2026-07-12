@@ -686,6 +686,14 @@
 
 /* 768px: Sidebar becomes overlay, two-col to single */
 @media (max-width: 768px) {
+  .af-topbar-left {
+    min-width: auto;
+  }
+
+  .af-topbar-right {
+    min-width: auto;
+  }
+
   .af-sidebar {
     position: fixed;
     left: 0;
@@ -810,3 +818,10 @@
   h2 { font-size: 1.375rem; }
   h3 { font-size: 1.125rem; }
 }
+
+@media (max-width: 360px) {
+  .af-topbar-logo-text {
+    display: none;
+  }
+}
+

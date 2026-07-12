@@ -97,8 +97,6 @@ AF.ScreenAuth = {
           <a href="#" class="af-auth-footer-link" id="btnDmca">DMCA</a>
           <span class="af-auth-footer-sep">·</span>
           <a href="#" class="af-auth-footer-link" id="btnContact">Contact Support</a>
-          <span class="af-auth-footer-sep">·</span>
-          <a href="https://github.com/Godkunn/AssetFlow" target="_blank" class="af-auth-footer-link">Official Website</a>
         </div>
       </div>
     </div>`;
