@@ -299,6 +299,10 @@
   position: relative;
 }
 
+.af-sidebar.dragging {
+  transition: none !important;
+}
+
 /* Collapsed sidebar (icon-only) */
 .af-sidebar.collapsed {
   width: 68px;
