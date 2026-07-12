@@ -1,0 +1,334 @@
+/* ═══════════════════════════════════════════════════════════════════
+   AssetFlow — Screens CSS
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── Auth Screen ─────────────────────────────────────────────────── */
+.af-auth-wrap {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--af-gradient-hero);
+  position: relative;
+  overflow: hidden;
+}
+
+.af-auth-canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  z-index: 1;
+}
+
+.af-auth-shell {
+  display: flex;
+  width: 900px;
+  height: 600px;
+  background: var(--af-surface);
+  backdrop-filter: blur(var(--af-glass-blur));
+  -webkit-backdrop-filter: blur(var(--af-glass-blur));
+  border: 1px solid var(--af-glass-border);
+  border-radius: var(--af-radius-xl);
+  box-shadow: var(--af-shadow-lg);
+  position: relative;
+  z-index: 2;
+  overflow: hidden;
+  animation: fadeInScale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.af-auth-banner {
+  flex: 1;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(0, 0, 0, 0.4)), url('assets/banner-bg.png') center/cover;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  position: relative;
+  border-right: 1px solid var(--af-border);
+}
+
+.af-auth-banner h2 {
+  font-family: 'Sora', sans-serif;
+  font-size: 36px;
+  margin-top: 24px;
+  margin-bottom: 16px;
+  color: #fff;
+  line-height: 1.2;
+}
+
+.af-auth-banner p {
+  color: var(--af-text-secondary);
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.af-auth-form {
+  flex: 1;
+  padding: 40px 60px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: var(--af-bg-primary);
+}
+
+.af-auth-form h3 {
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.af-demo-chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  border-radius: var(--af-radius-full);
+  background: var(--af-bg-tertiary);
+  border: 1px solid var(--af-border);
+  font-size: 12px;
+  color: var(--af-text-secondary);
+  cursor: pointer;
+  transition: all var(--af-transition-fast);
+  margin-right: 8px;
+  margin-bottom: 8px;
+}
+
+.af-demo-chip:hover {
+  background: var(--af-purple-tint, rgba(139, 92, 246, 0.1));
+  color: var(--af-purple-light);
+  border-color: var(--af-purple-subtle);
+}
+
+/* ── Dashboard ───────────────────────────────────────────────────── */
+.af-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.af-kpi-grid > * {
+  animation: fadeInUp 0.4s ease-out backwards;
+}
+
+.af-kpi-grid > *:nth-child(1) { animation-delay: 0.05s; }
+.af-kpi-grid > *:nth-child(2) { animation-delay: 0.1s; }
+.af-kpi-grid > *:nth-child(3) { animation-delay: 0.15s; }
+.af-kpi-grid > *:nth-child(4) { animation-delay: 0.2s; }
+.af-kpi-grid > *:nth-child(5) { animation-delay: 0.25s; }
+.af-kpi-grid > *:nth-child(6) { animation-delay: 0.3s; }
+
+.af-quick-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.af-activity-feed {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Organization ────────────────────────────────────────────────── */
+.af-org-tabs {
+  margin-bottom: 24px;
+}
+
+/* ── Assets ──────────────────────────────────────────────────────── */
+.af-asset-detail-drawer {
+  width: 400px;
+  background: var(--af-bg-primary);
+  border-left: 1px solid var(--af-border);
+  height: 100%;
+  position: absolute;
+  right: -400px;
+  top: 0;
+  transition: right var(--af-transition-spring);
+  box-shadow: -4px 0 24px rgba(0,0,0,0.2);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+}
+
+.af-asset-detail-drawer.open {
+  right: 0;
+}
+
+.af-qr-placeholder {
+  width: 100px; height: 100px;
+  background: var(--af-bg-tertiary);
+  border: 1px dashed var(--af-border-strong);
+  border-radius: var(--af-radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--af-text-muted);
+}
+
+.af-asset-expanded-row {
+  background: var(--af-bg-primary) !important;
+}
+
+.af-asset-expanded-row td {
+  padding: 0 !important;
+  border-bottom: none !important;
+}
+
+.af-asset-detail-panel {
+  padding: 24px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  background: rgba(0,0,0,0.1);
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* ── Allocation ──────────────────────────────────────────────────── */
+.af-transfer-card {
+  background: var(--af-bg-tertiary);
+  border: 1px solid var(--af-border);
+  border-radius: var(--af-radius-md);
+  padding: 16px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  transition: all var(--af-transition-fast);
+}
+
+.af-transfer-card:hover {
+  background: var(--af-surface-hover);
+  border-color: var(--af-purple-subtle);
+}
+
+.af-transfer-icon {
+  width: 40px; height: 40px;
+  background: var(--af-bg-secondary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--af-sky);
+}
+
+.af-transfer-details {
+  flex: 1;
+}
+
+.af-transfer-path {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.af-transfer-path svg {
+  color: var(--af-text-muted);
+}
+
+/* ── Maintenance Kanban ──────────────────────────────────────────── */
+/* (Styles are mostly in components.css under Kanban) */
+.af-maint-detail {
+  padding: 16px;
+  background: var(--af-bg-tertiary);
+  border-radius: var(--af-radius-md);
+  margin-top: 16px;
+}
+
+/* ── Audit ───────────────────────────────────────────────────────── */
+/* (Styles are mostly in components.css under Progress Bar) */
+.af-audit-summary {
+  display: flex;
+  gap: 24px;
+  padding: 20px;
+  background: var(--af-bg-secondary);
+  border-radius: var(--af-radius-lg);
+  margin-bottom: 24px;
+}
+
+.af-audit-stat {
+  display: flex;
+  flex-direction: column;
+}
+
+.af-audit-stat-val {
+  font-size: 24px;
+  font-weight: 700;
+  font-family: 'Sora', sans-serif;
+}
+
+.af-audit-stat-label {
+  font-size: 12px;
+  color: var(--af-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── Reports ─────────────────────────────────────────────────────── */
+.af-report-chart-container {
+  height: 240px;
+  position: relative;
+}
+
+.af-report-metric-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.af-metric-card {
+  padding: 16px;
+  background: var(--af-bg-tertiary);
+  border-radius: var(--af-radius-md);
+  text-align: center;
+}
+
+.af-metric-val {
+  font-size: 32px;
+  font-weight: 700;
+  font-family: 'Sora', sans-serif;
+  color: var(--af-purple-light);
+  margin-bottom: 4px;
+}
+
+.af-metric-label {
+  font-size: 13px;
+  color: var(--af-text-secondary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 1400px) {
+  .af-kpi-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 900px) {
+  .af-auth-shell {
+    flex-direction: column;
+    height: auto;
+    width: 90%;
+  }
+  .af-auth-banner {
+    padding: 30px;
+    border-right: none;
+    border-bottom: 1px solid var(--af-border);
+  }
+  .af-auth-form {
+    padding: 30px;
+  }
+  .af-kpi-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .af-asset-detail-panel {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  .af-kpi-grid {
+    grid-template-columns: 1fr;
+  }
+  .af-kanban {
+    grid-template-columns: repeat(5, 280px);
+  }
+}
