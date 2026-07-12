@@ -127,9 +127,9 @@
   --af-surface-hover: rgba(237, 233, 254, 0.8);
   --af-surface-border: rgba(139, 92, 246, 0.12);
 
-  --af-text-primary: #1E1433;
-  --af-text-secondary: #5B4F75;
-  --af-text-muted: #9189A4;
+  --af-text-primary: #100826;
+  --af-text-secondary: #3B2E5C;
+  --af-text-muted: #5E5280;
   --af-text-inverse: #FFFFFF;
 
   --af-border: rgba(139, 92, 246, 0.1);
